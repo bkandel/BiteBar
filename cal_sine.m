@@ -1,4 +1,4 @@
-function sum_diff_squared = cal_sine(coeffs, omega, X, Y)
+function sum_diff_squared = cal_sine(coeffs, X, Y)
 % Function used for fitting the sine curves for 
 % calibration of the rotational ratemeter using 
 % fminsearch.  
@@ -10,6 +10,7 @@ function sum_diff_squared = cal_sine(coeffs, omega, X, Y)
 amp = coeffs(1);
 DC = coeffs(2);
 phase = coeffs(3);
+omega = coeffs(4);
 
 Y_calc = DC + amp * sin((phase + X) * 2 * pi / omega); 
 

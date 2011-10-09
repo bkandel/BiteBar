@@ -2,7 +2,7 @@
 % ratemeter. 
 clear; clc
 % Define constants
-omega = 202; 
+omega_init = 202; 
 % Number of datapoints in a cycle of the ratemeter. 
 % For example, if the ratemeter is set to a 
 % frequency of 0.5 Hz and the datalogger logs 
@@ -34,14 +34,14 @@ cal_data{9} = yaw(2.03e4:2.2e4, 3);
 %% Calculate amp, DC, phase
 for i = 1:9 % number of runs
     % Get initial guess for phase, amp, DC
-    numCycles(i) = floor(length(cal_data{i}) / omega); 
+    numCycles(i) = floor(length(cal_data{i}) / omega_init); 
     for j = 1:numCycles(i)
-        cycle = cal_data{i}( (1 + (j - 1) * omega):(1 + j * omega)); 
+        cycle = cal_data{i}( (1 + (j - 1) * omega_init):(1 + j * omega_init)); 
         maxes{i}(j) = max(cycle); 
         mins{i}(j) = min(cycle); 
         amp{i}(j) = (maxes{i}(j) - mins{i}(j)) / 2; 
         DC{i}(j) = (maxes{i}(j) + mins{i}(j)) / 2; 
-        phase{i}(j) = find(cycle == maxes{i}(j), 1, 'first') - omega/4; 
+        phase{i}(j) = find(cycle == maxes{i}(j), 1, 'first') - omega_init/4; 
         % use the location of the first max to 
         % generate a guess for the phase. 
         % First max should occur 1/4 of the way 
@@ -50,19 +50,20 @@ for i = 1:9 % number of runs
     amp_avg(i) = mean(amp{i}); 
     DC_avg(i) = mean(DC{i});    
     phase_avg(i) = mean(phase{i}); 
+    omega(i) = omega_init; 
     
     % make one array with the various numbers 
     % for fitting with fminsearch
-    constants(i,:) = [amp_avg(i) DC_avg(i) phase_avg(i)];
+    constants(i,:) = [amp_avg(i) DC_avg(i) phase_avg(i) omega(i)];
     
     % Do least-squares optimization
     coeffs = constants(i,:); 
     X = 1:length(cal_data{i}); 
     Y = cal_data{i}; 
     Y = Y'; 
-    coeffs_opt(i, 1:3) = fminsearch(@cal_sine, coeffs, [], omega,  X, Y);
+    coeffs_opt(i, 1:4) = fminsearch(@cal_sine, coeffs, [],  X, Y);
     subplot(3,3,i); 
-    plot(X,Y,X, coeffs_opt(i,2)+ coeffs_opt(i,1) * sin((coeffs_opt(i,3) + X) * 2 * pi / omega)); 
+    plot(X,Y,X, coeffs_opt(i,2)+ coeffs_opt(i,1) * sin((coeffs_opt(i,3) + X) * 2 * pi / coeffs_opt(i,4))); 
     
 end
 
