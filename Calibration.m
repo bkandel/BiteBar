@@ -8,6 +8,7 @@ omega = 202;
 % frequency of 0.5 Hz and the datalogger logs 
 % at 100 Hz, omega will be 200. 
 
+%% Load Data
 % Load pitch calibration data. 
 pitch_all = importdata('~/Dropbox/BiteBlock/Calibrations/PITCH_CALIBRATION_20110915'); 
 cal_data{1} = pitch_all(2e4:2.25e4, 2); 
@@ -30,8 +31,9 @@ yaw = importdata('~/Dropbox/BiteBlock/Calibrations/YAW_CALIBRATION_20110831_120_
 cal_data{9} = yaw(2.03e4:2.2e4, 3); 
 
 
-% Obtain initial guesses for sine curve fitting
-for i = 1:9
+%% Calculate amp, DC, phase
+for i = 1:9 % number of runs
+    % Get initial guess for phase, amp, DC
     numCycles(i) = floor(length(cal_data{i}) / omega); 
     for j = 1:numCycles(i)
         cycle = cal_data{i}( (1 + (j - 1) * omega):(1 + j * omega)); 
@@ -52,10 +54,8 @@ for i = 1:9
     % make one array with the various numbers 
     % for fitting with fminsearch
     constants(i,:) = [amp_avg(i) DC_avg(i) phase_avg(i)];
-end
-
-% Do optimization
-for i = 1:9
+    
+    % Do least-squares optimization
     coeffs = constants(i,:); 
     X = 1:length(cal_data{i}); 
     Y = cal_data{i}; 
@@ -63,9 +63,8 @@ for i = 1:9
     coeffs_opt(i, 1:3) = fminsearch(@cal_sine, coeffs, [], omega,  X, Y);
     subplot(3,3,i); 
     plot(X,Y,X, coeffs_opt(i,2)+ coeffs_opt(i,1) * sin((coeffs_opt(i,3) + X) * 2 * pi / omega)); 
-
+    
 end
-
 
 
 
