@@ -38,22 +38,34 @@ for i = 1:length(cal_data) % number of runs
     Y = cal_data{i}; 
     Y = Y'; 
     coeffs_opt(i, 1:4) = fminsearch(@cal_sine, coeffs, [],  X, Y);
+    %{
     % optional plotting
     subplot(3,7,i); 
     plot(X,Y,X, coeffs_opt(i,2)+ coeffs_opt(i,1) * sin((coeffs_opt(i,3) + X) * 2 * pi / coeffs_opt(i,4))); 
     legend('data', 'fit')
+    %}
 end
 
-% Calculate roll calibrations
+% Calculate and save calibrations
 x_vec = Freqs; 
-fit = polyfit(x_vec, abs(coeffs_opt(1:7, 1))', 1); % take abs value of amplitude
-fitted_line = fit(2) + x_vec * fit(1); 
-figure; 
-plot(x_vec, fitted_line, x_vec, abs(coeffs_opt(1:7, 1))')
-legend('data', 'fit')
-roll_amp_const = fit(2); 
-roll_dc_const = mean(coeffs_opt(1:7, 2));
+num_measurements = length(Freqs); 
+for i = 1:3
+    fit(i,:) = polyfit(x_vec, abs(coeffs_opt((1 + num_measurements * (i - 1)) : (num_measurements * i), 1))', 1); % take abs value of amplitude
+    amp_fit(i) = fit(i,1);  %  amp
+    DC_fit(i) = mean(coeffs_opt((1 + num_measurements * (i - 1)) : (num_measurements * i), 2)');  % roll DC
+end
+
+save(strcat(Calib_Name, '.mat'), 'amp_fit', 'DC_fit')
 
 
+% plot the fit for visual verification
+%{
+for i = 1:3
+    fitted_line = fit(i,2) + x_vec * fit(i,1); 
+    figure; 
+    plot(x_vec, fitted_line, x_vec, abs(coeffs_opt((1 + num_measurements * (i - 1)) : (num_measurements * i), 1))')
+    legend('data', 'fit')
+end
+%}
 
 

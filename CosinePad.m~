@@ -1,0 +1,16 @@
+function Padded = CosinePad(X, ...
+    sampling_rate, totalLengthInSecs, padLengthInSecs)
+
+% This function is made to perform a cosine 
+% windowing and zero-padding to a vector.  
+
+totalLengthInIndices = totalLengthInSecs * sampling_rate; 
+padLengthInIndices = padLengthInSecs * sampling_frequ; 
+
+zeroPad = zeros(padLengthInIndices, 1)'; 
+xPad = horzcat(zeroPad, X); 
+endPadLength = totalLengthInIndices - length(xPad); 
+endPad = ones(endPadLength, 1) * X(end); 
+cosWindow = cos((1:endPadLength) / endPadLength * pi / 2); 
+endPadWindowed = endPad .* cosWindow; 
+Padded = horzcat(xPad, endPadWindowed); 
