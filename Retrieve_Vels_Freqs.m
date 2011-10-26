@@ -14,7 +14,7 @@ padLength = 5;
 % We will zero-pad the transients for five seconds
 
 
-run('~/Dropbox/BiteBlock/Data/Data_Def.m'); 
+run('C:\Users\Ben\Dropbox\BiteBlock\Data\Data_Def.m'); 
 
 load(calibration_file); 
 correction_amp = amp_fit.^(-1); 
