@@ -31,8 +31,9 @@ Min_Length = Min_Duration * sampling_rate / 1000;
 
 %% Find indices where tracing switches direction
 
-[transient_pos, transient_vel, numTransients] = RetrieveTransients(Data_Calib, ...
-    Position, Min_Magnitude, Min_Length);
+
+
+
 %% Do frequency analysis
 % Pad and cosine window transients
 names{1} = 'Roll'; 
@@ -44,7 +45,7 @@ figure(1);
 % be better documented, etc.
 for i = 1:length(Data_Calib)
     for j = 1:3
-        for k = 1:(numTransients(i,j) - 1) % m-1 is number of significant transients
+        for k = 1:(m(j) - 1) % m-1 is number of significant transients
             trans_pos_pad{i,j}{k} = CosinePad(transient_pos{i,j}{k}, ...
                 sampling_rate, transLengthPadded, padLength); 
             [trans_pos_fft{i,j}{k}, freq_indices{i,j}{k}] = positiveFFT(trans_pos_pad{i,j}{k}, sampling_rate);
@@ -65,7 +66,7 @@ end
 figure(2); 
 for i = 1:length(Data_Calib)
     for j = 1:3
-        for k = 1:(numTransients(i,j) - 1) % as before
+        for k = 1:(m(j) - 1) % as before
             max_vels{i,j}(k) = max(abs(transient_vel{i,j}{k})); 
         end
         subplot(i,3,j); vel_hist{i,j} = histc(max_vels{i,j}, 0:75:600) / length(max_vels{i,j}); 
