@@ -9,10 +9,10 @@ face = [
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 
-    0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0; 
-    0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 
-    0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 
-    0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 
+    0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 1 0 0 0 0; 
+    0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 
+    0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0; 
+    0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 
     0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0; 
     0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0; 
@@ -45,7 +45,8 @@ padLength = 5; % sec
 pctCutoff = 0.99; % cutoff for bandwidth is 99%
 
 
-run('C:\Users\Ben\Dropbox\BiteBlock\Data\Data_Def.m'); 
+run(strcat('C:\Users\Ben\Dropbox\BiteBlock\Data\', ...
+    'Calibration_20111010\Cal_20111010_dataVerification_def.m')); 
 
 load(calibration_file); 
 correction_amp = amp_fit.^(-1); 
@@ -57,8 +58,11 @@ correction_amp = amp_fit.^(-1);
 [Data_Calib, Position] = CalibrateRawData(Data_Raw, DC_fit, ...
     sampling_rate, correction_amp); 
 
-length = 1000; 
-dataUsed = Position{1}(1:length, :); 
+dataUsed = Position{1}(10610:10:57540, :); 
+Normalize = repmat(dataUsed(1,:), length(dataUsed), 1); 
+dataUsed = dataUsed - Normalize; 
+% Normalize data so that we start movements from a position looking
+% forward. 
 dataUsed = dataUsed'; 
 
 rotationMatrixYaw = makeRotationMatrix(-45, 'z'); 
@@ -67,28 +71,28 @@ dataRotated =rotationMatrixYaw * dataUsed;
 dataRotated = rotationMatrixPitch * dataRotated; 
 % the positions (=rotations) should now be in the Reid x,y,z axes.
 
-set(gca,'nextplot','replacechildren');
-for i = 1:length
-    xMat = makeRotationMatrix(dataRotated(1,i), 'x'); 
-    yMat = makeRotationMatrix(dataRotated(2,i),'y'); 
-    zMat = makeRotationMatrix(dataRotated(3,i),'z'); 
-    faceRotated = xMat * yMat * zMat * xyzCombined; 
-    xRotatedRow = faceRotated(1,:); 
-    xRotated = reshape(xRotatedRow, 20, 20); 
-    yRotatedRow = faceRotated(2,:); 
-    yRotated = reshape(yRotatedRow, 20, 20); 
-    zRotatedRow = faceRotated(3,:); 
-    zRotated = reshape(zRotatedRow, 20, 20); 
-    surface(xRotated, yRotated, zRotated, face);
-    colormap gray; 
-    view([1 1 1])
-    pause(0.3)
-    F(i) = getframe; 
-    close
-end
-movie(F, 1, 100)
 
-    
+% set(gca,'nextplot','replacechildren');
+% for i = 1:length(dataUsed)
+%     xMat = makeRotationMatrix(dataRotated(1,i), 'x'); 
+%     yMat = makeRotationMatrix(dataRotated(2,i),'y'); 
+%     zMat = makeRotationMatrix(dataRotated(3,i),'z'); 
+%     faceRotated = xMat * yMat * zMat * xyzCombined; 
+%     xRotatedRow = faceRotated(1,:); 
+%     xRotated = reshape(xRotatedRow, 20, 20); 
+%     yRotatedRow = faceRotated(2,:); 
+%     yRotated = reshape(yRotatedRow, 20, 20); 
+%     zRotatedRow = faceRotated(3,:); 
+%     zRotated = reshape(zRotatedRow, 20, 20);
+%     surface(xRotated, yRotated, zRotated, face);
+%     colormap gray; 
+%     view([1 1 1])
+%     F(i) = getframe; 
+%     close
+% end
+% movie(F,1,10)
+
+
 
     
     

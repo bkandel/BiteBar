@@ -45,7 +45,8 @@ padLength = 5; % sec
 pctCutoff = 0.99; % cutoff for bandwidth is 99%
 
 
-run('C:\Users\Ben\Dropbox\BiteBlock\Data\Data_Def.m'); 
+run(strcat('C:\Users\Ben\Dropbox\BiteBlock\Data', ...
+    '\StandardizedHeadMovements\StandardizedHeadMovements_20111006_def.m')); 
 
 load(calibration_file); 
 correction_amp = amp_fit.^(-1); 
@@ -57,8 +58,11 @@ correction_amp = amp_fit.^(-1);
 [Data_Calib, Position] = CalibrateRawData(Data_Raw, DC_fit, ...
     sampling_rate, correction_amp); 
 
-length = 2000; 
-dataUsed = Position{1}(6000:10:8000, :); 
+dataUsed = Position{1}(2300:10:5480, :); 
+Normalize = repmat(dataUsed(1,:), length(dataUsed), 1); 
+dataUsed = dataUsed - Normalize; 
+% Normalize data so that we start movements from a position looking
+% forward. 
 dataUsed = dataUsed'; 
 
 rotationMatrixYaw = makeRotationMatrix(-45, 'z'); 
@@ -67,8 +71,9 @@ dataRotated =rotationMatrixYaw * dataUsed;
 dataRotated = rotationMatrixPitch * dataRotated; 
 % the positions (=rotations) should now be in the Reid x,y,z axes.
 
+
 set(gca,'nextplot','replacechildren');
-for i = 1:length/10
+for i = 1:length(dataUsed)
     xMat = makeRotationMatrix(dataRotated(1,i), 'x'); 
     yMat = makeRotationMatrix(dataRotated(2,i),'y'); 
     zMat = makeRotationMatrix(dataRotated(3,i),'z'); 
@@ -81,14 +86,15 @@ for i = 1:length/10
     zRotated = reshape(zRotatedRow, 20, 20);
     surface(xRotated, yRotated, zRotated, face);
     colormap gray; 
-    view([-1 -1 1])
-    pause(0.05)
+    view([1 1 1])
     F(i) = getframe; 
     close
 end
 movie(F,1,10)
+movie2avi(F, 'C:\Users\Ben\Dropbox\BiteBlock\Figures\StandardMovements.avi', ...
+    'fps', 10)
 
-    
+
 
     
     

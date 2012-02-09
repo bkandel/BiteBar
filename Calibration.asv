@@ -5,7 +5,7 @@
 clear; clc
 
 %% Load data from definition file
-run('C:\Users\Ben\Dropbox\BiteBlock\Calibrations\Calibration_20120203\Cal_20120203_def.m'); 
+run('C:\Users\Ben\Dropbox\BiteBlock\Calibrations\Calibration_20111024\Cal_20111024_def.m'); 
 
 
 
@@ -60,27 +60,22 @@ end
 x_vec = Freqs; 
 num_measurements = length(Freqs); 
 for i = 1:3
-    fit(i,:) = polyfit(x_vec, abs(coeffs_opt(i,:,1)),1); % take abs value of amplitude
+    fit(i,:) = polyfit(x_vec, abs(coeffs_opt((1 + num_measurements * (i - 1)) : (num_measurements * i), 1))', 1); % take abs value of amplitude
     amp_fit(i) = fit(i,1);  %  amp
-    %DC_fit(i) = mean(coeffs_opt(i,:,2));  %  DC
-    DC_fit(i) = coeffs_opt(i,end,2); 
+    DC_fit(i) = mean(coeffs_opt((1 + num_measurements * (i - 1)) : (num_measurements * i), 2)');  % roll DC
 end
 
 save(strcat(Calib_Name, '.mat'), 'amp_fit', 'DC_fit')
 
 
 % plot the fit for visual verification
-%{
-names{1} = 'Roll'; 
-names{2} = 'Pitch'; 
-names{3} = 'Yaw'; 
+
 for i = 1:3
     fitted_line = fit(i,2) + x_vec * fit(i,1); 
     figure; 
-    plot(x_vec, fitted_line, x_vec, abs(coeffs_opt(i,:, 1))')
+    plot(x_vec, fitted_line, x_vec, abs(coeffs_opt((1 + num_measurements * (i - 1)) : (num_measurements * i), 1))')
     legend('data', 'fit')
-    title(names{i})
 end
-%}
+
 
 
