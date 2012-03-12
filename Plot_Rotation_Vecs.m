@@ -13,12 +13,12 @@ transLengthPadded = 10; % sec
 padLength = 5; % sec
 % We will zero-pad the transients for five seconds
 pctCutoff = 0.99; % cutoff for bandwidth is 99%
-sigma = 3; % sigma for smoothing pdf
+sigma = 2; % sigma for smoothing pdf
 num_bins = 100; % number of bins for histogram
 
 
 run(strcat('C:\Users\Ben\Dropbox\BiteBlock\Data\', ...
-    'Parkour\Parkour_20120202_G1_def.m')); 
+    'CodeTest\Code_Test_def.m')); 
 
 load(calibration_file); 
 correction_amp = amp_fit.^(-1); 
@@ -48,10 +48,10 @@ dataRotated = dataRotated';
 
 [theta phi smoothed_pdf angular_pdf normalized_data centers] = ...
     angular_velocity_pdf(dataUsed', sigma, num_bins); 
-figure(1); surf(centers{2}, centers{1}, smoothed_pdf);
+figure(1); pcolor(centers{2}, centers{1}, smoothed_pdf);
 xlabel('\phi'); 
 ylabel('\theta')
-
+title('PDF of angular velocities for run-jump data.')
 figure(2)
 [x,y,z] = sphere(30);
 cla reset
@@ -67,4 +67,6 @@ props.EdgeColor = 'none';
 %props.FaceLighting = 'phong';
 surface(x,y,z,props);
 view([1 1 1])
+title('PDF of angular velocities for run-jump data, mapped to sphere.')
+
 

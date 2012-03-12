@@ -16,7 +16,7 @@ pctCutoff = 0.99; % cutoff for bandwidth is 99%
 
 
 run(strcat('C:\Users\Ben\Dropbox\BiteBlock\Data\', ...
-    'Parkour\Parkour_20120202_G1_def.m')); 
+    'CodeTest\Code_Test_def.m')); 
 
 load(calibration_file); 
 correction_amp = amp_fit.^(-1); 
@@ -44,6 +44,7 @@ max_vels = retrieveMaxVels(Data_Calib, transient_vel, ...
     numTransients); 
 
 %% Plot results
+%{
 run_names{1} = 'Walk'; 
 run_names{2} = 'Obstacles'; 
 run_names{3} = 'Chase'; 
@@ -97,5 +98,5 @@ for i = 1:length(Data_Calib)
     close
 end
 
-        
+%}        
 
