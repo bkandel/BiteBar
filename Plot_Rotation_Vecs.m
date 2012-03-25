@@ -31,17 +31,16 @@ Min_Length = Min_Duration * sampling_rate / 1000;
 %% Convert to deg/s. 
 [Data_Calib, Position] = CalibrateRawData(Data_Raw, DC_fit, ...
     sampling_rate, correction_amp); 
-roll_data = Data_Calib{4}(:,2); 
-pitch_data = Data_Calib{4}(:,1); 
-yaw_data = Data_Calib{4}(:,3); 
+roll_data = Data_Calib{5}(:,2); 
+pitch_data = Data_Calib{5}(:,1); 
+yaw_data = Data_Calib{5}(:,3); 
 dataUsed = [roll_data pitch_data yaw_data]; 
 
 dataUsed = dataUsed'; 
 
-rotationMatrixYaw = makeRotationMatrix(-45, 'z'); 
-rotationMatrixPitch = makeRotationMatrix(19, 'y'); 
-dataRotated =rotationMatrixYaw * dataUsed; 
-dataRotated = rotationMatrixPitch * dataRotated; 
+rotationMatrixYaw = makeRotationMatrix(45, 'z'); 
+
+dataRotated = rotationMatrixYaw * dataUsed;
 % the positions (=rotations) should now be in the Reid x,y,z axes.
 % copied from Head_Movement_Vis.m
 dataRotated = dataRotated'; 
