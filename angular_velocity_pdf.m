@@ -12,13 +12,8 @@ magnitude        = repmat(magnitude, 1, 3);
 normalized_data  = rotation_data ./ magnitude; 
 
 %% Calculate angles
-theta = atan(normalized_data(:,1) ./ normalized_data(:,2));
+theta = atan2(normalized_data(:,1), normalized_data(:,2));
 % theta is the angle from the right ear out.  It goes from -pi to pi. 
-theta(normalized_data(:,2) < 0) = theta(normalized_data(:,2) < 0) ...
-    + sign(theta(normalized_data(:,2) < 0)) * pi/2; 
-% Correct for periodicity of tan:  If roll is less than 0 (corresponding to
-% left side of head), the range should be from -pi to -pi/2 and pi/2 to pi,
-% not from -pi/2 to pi/2, as in the unmodified tan function. 
 
 phi   = acos(normalized_data(:,3));
 % phi is azimuthal angle, measured from the top of the head down. 

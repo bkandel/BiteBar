@@ -31,9 +31,20 @@ Min_Length = Min_Duration * sampling_rate / 1000;
 %% Convert to deg/s. 
 [Data_Calib, Position] = CalibrateRawData(Data_Raw, DC_fit, ...
     sampling_rate, correction_amp); 
-roll_data = Data_Calib{8}(:,2); 
-pitch_data = Data_Calib{8}(:,1); 
-yaw_data = Data_Calib{8}(:,3); 
+Names{1} = 'All data.';
+Names{2} = 'Turning Right.'; 
+Names{3} = 'Turning Left.'; 
+Names{4} = 'Turning Up.'; 
+Names{5} = 'Turning Down.'; 
+Names{6} = 'Tilting Right.';
+Names{7} = 'Tilting Left.'; 
+Names{8} = 'Tilting Right II.'; 
+Names{9} = 'Tilting Left II.';
+
+for (i = 2:7)
+roll_data = Data_Calib{i}(:,2); 
+pitch_data = Data_Calib{i}(:,1); 
+yaw_data = Data_Calib{i}(:,3); 
 dataUsed = [roll_data pitch_data yaw_data]; 
 
 dataUsed = dataUsed'; 
@@ -47,11 +58,16 @@ dataRotated = rotationMatrixRoll * dataRotated;
 dataRotated = dataRotated'; 
 
 [theta phi smoothed_pdf angular_pdf normalized_data centers] = ...
-    angular_velocity_pdf(dataUsed', sigma, num_bins); 
-figure; pcolor(centers{2}, centers{1}, smoothed_pdf); shading interp; 
+    angular_velocity_pdf(dataRotated, sigma, num_bins); 
+figure (1); subplot(3,2,i-1); 
+pcolor(centers{2}, centers{1}, smoothed_pdf); shading interp; 
 xlabel('\phi'); 
 ylabel('\theta')
-title('PDF of angular velocities for tilting right.')
+title(Names{i})
+figure(2); subplot(3,2,i-1); 
+plot(dataRotated); legend('Roll', 'Pitch', 'Yaw')
+title(Names{i})
+end
 %{
 figure(2)
 [x,y,z] = sphere(30);
