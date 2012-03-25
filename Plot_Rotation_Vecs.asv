@@ -31,27 +31,28 @@ Min_Length = Min_Duration * sampling_rate / 1000;
 %% Convert to deg/s. 
 [Data_Calib, Position] = CalibrateRawData(Data_Raw, DC_fit, ...
     sampling_rate, correction_amp); 
-roll_data = Data_Calib{2}(:,2); 
-pitch_data = Data_Calib{2}(:,1); 
-yaw_data = Data_Calib{2}(:,3); 
+roll_data = Data_Calib{7}(:,2); 
+pitch_data = Data_Calib{7}(:,1); 
+yaw_data = Data_Calib{4}(:,3); 
 dataUsed = [roll_data pitch_data yaw_data]; 
 
 dataUsed = dataUsed'; 
 
-rotationMatrixRoll = makeRotationMatrix(-45, 'z'); 
-rotationMatrixPitch = makeRotationMatrix(19, 'y'); 
-dataRotated =rotationMatrixYaw * dataUsed; 
-dataRotated = rotationMatrixPitch * dataRotated; 
+rotationMatrixRoll = makeRotationMatrix(-19, 'y'); 
+rotationMatrixYaw = makeRotationMatrix(-45, 'z'); 
+dataRotated = rotationMatrixYaw * dataUsed;
+dataRotated = rotationMatrixRoll * dataRotated; 
 % the positions (=rotations) should now be in the Reid x,y,z axes.
 % copied from Head_Movement_Vis.m
 dataRotated = dataRotated'; 
 
 [theta phi smoothed_pdf angular_pdf normalized_data centers] = ...
     angular_velocity_pdf(dataUsed', sigma, num_bins); 
-figure(1); pcolor(centers{2}, centers{1}, smoothed_pdf);
+figure(1); pcolor(centers{2}, centers{1}, smoothed_pdf); shading interp; 
 xlabel('\phi'); 
 ylabel('\theta')
 title('PDF of angular velocities for run-jump data.')
+%{
 figure(2)
 [x,y,z] = sphere(30);
 cla reset
@@ -68,5 +69,6 @@ props.EdgeColor = 'none';
 surface(x,y,z,props);
 view([1 1 1])
 title('PDF of angular velocities for run-jump data, mapped to sphere.')
+%}
 
 

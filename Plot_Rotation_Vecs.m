@@ -1,6 +1,6 @@
 % This mfile will be used to do the basic analysis
 % of the raw data. 
-clear; clc; close all; 
+clear; clc;% close all; 
 
 %% Define Constants
 Min_Magnitude = 5; 
@@ -31,26 +31,28 @@ Min_Length = Min_Duration * sampling_rate / 1000;
 %% Convert to deg/s. 
 [Data_Calib, Position] = CalibrateRawData(Data_Raw, DC_fit, ...
     sampling_rate, correction_amp); 
-roll_data = Data_Calib{5}(:,2); 
-pitch_data = Data_Calib{5}(:,1); 
-yaw_data = Data_Calib{5}(:,3); 
+roll_data = Data_Calib{8}(:,2); 
+pitch_data = Data_Calib{8}(:,1); 
+yaw_data = Data_Calib{8}(:,3); 
 dataUsed = [roll_data pitch_data yaw_data]; 
 
 dataUsed = dataUsed'; 
 
-rotationMatrixYaw = makeRotationMatrix(45, 'z'); 
-
+rotationMatrixRoll = makeRotationMatrix(-19, 'y'); 
+rotationMatrixYaw = makeRotationMatrix(-45, 'z'); 
 dataRotated = rotationMatrixYaw * dataUsed;
+dataRotated = rotationMatrixRoll * dataRotated; 
 % the positions (=rotations) should now be in the Reid x,y,z axes.
 % copied from Head_Movement_Vis.m
 dataRotated = dataRotated'; 
 
 [theta phi smoothed_pdf angular_pdf normalized_data centers] = ...
     angular_velocity_pdf(dataUsed', sigma, num_bins); 
-figure(1); pcolor(centers{2}, centers{1}, smoothed_pdf);
+figure; pcolor(centers{2}, centers{1}, smoothed_pdf); shading interp; 
 xlabel('\phi'); 
 ylabel('\theta')
-title('PDF of angular velocities for run-jump data.')
+title('PDF of angular velocities for tilting right.')
+%{
 figure(2)
 [x,y,z] = sphere(30);
 cla reset
@@ -67,5 +69,6 @@ props.EdgeColor = 'none';
 surface(x,y,z,props);
 view([1 1 1])
 title('PDF of angular velocities for run-jump data, mapped to sphere.')
+%}
 
 
