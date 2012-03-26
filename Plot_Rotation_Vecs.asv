@@ -34,12 +34,7 @@ Min_Length = Min_Duration * sampling_rate / 1000;
 Names{1} = 'All data.';
 Names{2} = 'Turning Right.'; 
 Names{3} = 'Turning Left.'; 
-Names{4} = 'Turn Up.'; 
-Names{5} = 'Looking Down.'; 
-Names{6} = 'Tilting Right.';
-Names{7} = 'Tilting Left.'; 
-Names{8} = 'Tilting Right II.'; 
-Names{9} = 'Tilting Left II.';
+
 
 for (i = 2:7)
 roll_data = Data_Calib{i}(:,2); 
@@ -68,8 +63,8 @@ figure(2); subplot(3,2,i-1);
 plot(dataRotated); legend('Roll', 'Pitch', 'Yaw')
 title(Names{i})
 end
-%{
-figure(2)
+
+figure(3)
 [x,y,z] = sphere(30);
 cla reset
 axis square off
@@ -85,6 +80,6 @@ props.EdgeColor = 'none';
 surface(x,y,z,props);
 view([1 1 1])
 title('PDF of angular velocities for run-jump data, mapped to sphere.')
-%}
+
 
 

@@ -1,0 +1,62 @@
+clear; clc; 
+% Define constants and prereqs
+sigma = 2; % sigma for smoothing pdf
+num_bins = 100; % number of bins for histogram
+
+% Load data
+run(strcat('C:\Users\Ben\Dropbox\BiteBlock\Data\', ...
+    'CodeTest\Code_Test_def.m'));
+load(calibration_file); 
+correction_amp = amp_fit.^(-1); 
+
+% Convert to deg/s
+[Data_Calib, Position] = CalibrateRawData(Data_Raw, DC_fit, ...
+    sampling_rate, correction_amp); 
+
+%% Compute Histograms
+Names{1} = 'All data.'; 
+Names{2} = 'Turning Right.';
+Names{3} = 'Turning Left.'; 
+Names{4} = 'Looking Up.'; 
+Names{5} = 'Looking Down.'; 
+Names{6} = 'Tilting Right.'; 
+Names{7} = 'Tilting Left.'; 
+
+progressbar('Progress.')
+for i = 2:7
+    roll_data = Data_Calib{i}(:,2); 
+    pitch_data = Data_Calib{i}(:,1); 
+    yaw_data = Data_Calib{i}(:,3); 
+    dataUsed = [roll_data pitch_data yaw_data];
+    dataUsed = dataUsed'; 
+    rotationMatrixRoll = makeRotationMatrix(-19, 'y'); 
+    rotationMatrixYaw = makeRotationMatrix(-45, 'z'); 
+    dataRotated = rotationMatrixYaw * dataUsed;
+    dataRotated = rotationMatrixRoll * dataRotated; 
+    % the positions (=rotations) should now be in the Reid x,y,z axes.
+    % copied from Head_Movement_Vis.m
+    dataRotated = dataRotated'; 
+    [theta phi smoothed_pdf angular_pdf normalized_data centers magnitude] = ...
+        angular_velocity_pdf(dataRotated, sigma, num_bins);
+    
+    theta_bin_width = centers{1}(2) - centers{1}(1); 
+    phi_bin_width = centers{2}(2) - centers{2}(1); 
+    amplitude_plot = zeros(length(centers{1}), length(centers{2})); 
+    for theta_index = 1:length(centers{1})
+        for phi_index = 1:length(centers{2})
+            amplitude_plot(theta_index, phi_index) = ...
+                max(mean(magnitude(theta > (centers{1}(theta_index) - theta_bin_width / 2) ...
+                    & theta < (centers{1}(theta_index) + theta_bin_width / 2) ...
+                    & phi > (centers{2}(phi_index) - phi_bin_width / 2) ...
+                    & phi < (centers{2}(phi_index) + phi_bin_width / 2))), 0); 
+        end
+    end
+    size = (ceil((ceil(6 * sigma) / 2) + 0.5) * 2) - 1; 
+    % size is 6 * sigma, rounded up to next odd integer 
+    gaussFilter = fspecial('gaussian', size, sigma); 
+    amplitude_smoothed = conv2(amplitude_plot, gaussFilter, 'same'); 
+    subplot(3,2,i-i); pcolor(amplitude_smoothed); shading interp; 
+    title(Names{i})
+end
+
+    

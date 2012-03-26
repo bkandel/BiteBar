@@ -18,7 +18,7 @@ num_bins = 100; % number of bins for histogram
 
 
 run(strcat('C:\Users\Ben\Dropbox\BiteBlock\Data\', ...
-    'CodeTest\Code_Test_def.m')); 
+    'Parkour\Parkour_20120202_G1_def.m')); 
 
 load(calibration_file); 
 correction_amp = amp_fit.^(-1); 
@@ -31,17 +31,13 @@ Min_Length = Min_Duration * sampling_rate / 1000;
 %% Convert to deg/s. 
 [Data_Calib, Position] = CalibrateRawData(Data_Raw, DC_fit, ...
     sampling_rate, correction_amp); 
-Names{1} = 'All data.';
-Names{2} = 'Turning Right.'; 
-Names{3} = 'Turning Left.'; 
-Names{4} = 'Turning Up.'; 
-Names{5} = 'Turning Down.'; 
-Names{6} = 'Tilting Right.';
-Names{7} = 'Tilting Left.'; 
-Names{8} = 'Tilting Right II.'; 
-Names{9} = 'Tilting Left II.';
+Names{1} = 'Walk';
+Names{2} = 'Obstacles'; 
+Names{3} = 'Chase'; 
+Names{4} = 'Run and jump';
 
-for (i = 2:7)
+
+for i = 1:4
 roll_data = Data_Calib{i}(:,2); 
 pitch_data = Data_Calib{i}(:,1); 
 yaw_data = Data_Calib{i}(:,3); 
@@ -59,17 +55,17 @@ dataRotated = dataRotated';
 
 [theta phi smoothed_pdf angular_pdf normalized_data centers] = ...
     angular_velocity_pdf(dataRotated, sigma, num_bins); 
-figure (1); subplot(3,2,i-1); 
+figure (1); subplot(2,2,i); 
 pcolor(centers{2}, centers{1}, smoothed_pdf); shading interp; 
 xlabel('\phi'); 
 ylabel('\theta')
 title(Names{i})
-figure(2); subplot(3,2,i-1); 
+figure(2); subplot(2,2,i); 
 plot(dataRotated); legend('Roll', 'Pitch', 'Yaw')
 title(Names{i})
-end
-%{
-figure(2)
+
+
+figure; 
 [x,y,z] = sphere(30);
 cla reset
 axis square off
@@ -84,7 +80,8 @@ props.EdgeColor = 'none';
 %props.FaceLighting = 'phong';
 surface(x,y,z,props);
 view([1 1 1])
-title('PDF of angular velocities for run-jump data, mapped to sphere.')
-%}
+title(Names{i})
+
+end
 
 

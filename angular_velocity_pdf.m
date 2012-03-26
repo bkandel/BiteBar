@@ -1,4 +1,4 @@
-function [theta phi smoothed_pdf angular_pdf normalized_data centers] = ...
+function [theta phi smoothed_pdf angular_pdf normalized_data centers magnitude] = ...
     angular_velocity_pdf(rotation_data, sigma, num_bins)
 % This function will take the rotation data and return a plot of the
 % directional vectors.
@@ -7,9 +7,9 @@ function [theta phi smoothed_pdf angular_pdf normalized_data centers] = ...
 velocity_squared = rotation_data.^2;
 magnitude        = (sum(velocity_squared, 2)).^0.5; 
 % sum over rows (data points) and take square root for magnitude
-magnitude        = repmat(magnitude, 1, 3); 
+magnitude_rep    = repmat(magnitude, 1, 3); 
 % get 3 x n data matrix for easy matrix computation
-normalized_data  = rotation_data ./ magnitude; 
+normalized_data  = rotation_data ./ magnitude_rep; 
 
 %% Calculate angles
 theta = atan2(normalized_data(:,1), normalized_data(:,2));
