@@ -7,7 +7,7 @@ for i = 1:length(FileList)
    File = FileList(i).name; 
    fid = fopen(strcat(Directory, File)); 
    data = textscan(fid, ...
-       '%u%u%f%f%f%f%f%f%f%f%f%f%f%f%f%f', ...
+       '%d%d%f%f%f%f%f%f%f%f%f%f%f%f%f%f', ...
        'Whitespace', ', :', 'HeaderLines', 1); 
    fclose(fid); 
    TimeInMilliseconds = data{3}; 
@@ -16,7 +16,7 @@ for i = 1:length(FileList)
    TimeInMinutes = data{2}; 
    TimeInMinutesShifted = circshift(TimeInMinutes, 1); 
    ChangeInMinutes = TimeInMinutes - TimeInMinutesShifted; 
-   Deltas(ChangeInMinutes == 1) = 0; 
+   Deltas(ChangeInMinutes ~= 0) = 0; 
    axes(Figure(i)); 
    plot(Deltas(5:end))
     
