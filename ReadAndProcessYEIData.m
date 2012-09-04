@@ -27,20 +27,26 @@ while NonUniqueTimes > 0
         TimeElapsed(TimeElapsed == circshift(TimeElapsed, 1)) + 1e-5; 
     NonUniqueTimes = sum(TimeElapsed == circshift(TimeElapsed, 1)); 
 end
+% Select times of interest
+TimeSelector = 1:length(TimeElapsed); 
+TimeSelector = TimeSelector((TimeElapsed > 5) & (TimeElapsed < 60)); 
+TimeElapsedOfInterest = TimeElapsed(TimeSelector); 
+TimeElapsedOfInterest = TimeElapsedOfInterest - TimeElapsedOfInterest(1); 
 
 %% Interpolate and Downsample
-TimeElapsedResampled = 0:(1 / ResampleRate):TimeElapsed(end); 
-ResampledXGyro = interp1(TimeElapsed, data{14}, TimeElapsedResampled, ...
-    'linear'); 
-ResampledYGyro = interp1(TimeElapsed, data{15}, TimeElapsedResampled, ...
-    'linear'); 
-ResampledZGyro = interp1(TimeElapsed, data{16}, TimeElapsedResampled, ...
-    'linear'); 
+TimeElapsedResampledOfInterest = ...
+    0:(1 / ResampleRate):TimeElapsedOfInterest(end); 
+ResampledXGyro = interp1(TimeElapsedOfInterest, data{14}(TimeSelector), ...
+    TimeElapsedResampledOfInterest, 'linear'); 
+ResampledYGyro = interp1(TimeElapsedOfInterest, data{15}(TimeSelector), ...
+    TimeElapsedResampledOfInterest, 'linear'); 
+ResampledZGyro = interp1(TimeElapsedOfInterest, data{16}(TimeSelector), ...
+    TimeElapsedResampledOfInterest, 'linear'); 
 DownsampledXGyro = decimate(ResampledXGyro, 2); 
 DownsampledYGyro = decimate(ResampledYGyro, 2); 
 DownsampledZGyro = decimate(ResampledZGyro, 2); 
-DownsampledTimeElapsed = ...
-    0:(1 /(ResampleRate / DownsampleFactor)):TimeElapsed(end); 
+DownsampledTimeElapsedOfInterest = ...
+    0:(1 /(ResampleRate / DownsampleFactor)):TimeElapsedOfInterest(end); 
 %plot(TimeElapsed, data{14}, TimeElapsedResampled, InterpolatedXGyro); 
 %legend('original', 'resampled')
 
@@ -59,11 +65,11 @@ CalibratedFilteredZGyro = filter(b, a, CalibratedZGyro);
 
 %% Calculate Position
  
- PositionX = cumtrapz(DownsampledTimeElapsed, CalibratedFilteredXGyro - ...
+ PositionX = cumtrapz(DownsampledTimeElapsedOfInterest, CalibratedFilteredXGyro - ...
      mean(CalibratedFilteredXGyro)); 
- PositionY = cumtrapz(DownsampledTimeElapsed, CalibratedFilteredYGyro - ...
+ PositionY = cumtrapz(DownsampledTimeElapsedOfInterest, CalibratedFilteredYGyro - ...
      mean(CalibratedFilteredYGyro)); 
- PositionZ = cumtrapz(DownsampledTimeElapsed, CalibratedFilteredZGyro - ...
+ PositionZ = cumtrapz(DownsampledTimeElapsedOfInterest, CalibratedFilteredZGyro - ...
      mean(CalibratedFilteredZGyro)); 
  
 %% Calculate Fourier Transform
@@ -82,20 +88,28 @@ ZFrequencyComponentOfInterest = ZFrequencyComponent(FrequencySelector);
 
 
 %% Plotting
-plot(TimeElapsed, data{14}, DownsampledTimeElapsed, DownsampledXGyro); 
+%{
+plot(TimeElapsedOfInterest, data{14}(TimeSelector), ...
+    DownsampledTimeElapsedOfInterest, DownsampledXGyro); 
 legend('raw', 'downsampled')
-
+%}
 figure(1); 
-plot(DownsampledTimeElapsed, CalibratedFilteredXGyro, ...
-     DownsampledTimeElapsed, CalibratedFilteredYGyro, ...
-     DownsampledTimeElapsed, CalibratedFilteredZGyro)
+plot(DownsampledTimeElapsedOfInterest, CalibratedFilteredXGyro, ...
+     DownsampledTimeElapsedOfInterest, CalibratedFilteredYGyro, ...
+     DownsampledTimeElapsedOfInterest, CalibratedFilteredZGyro)
  legend('Roll', 'Pitch', 'Yaw')
  title('Calibrated and Filtered Velocity Recordings vs. Time')
+ xlabel('Elapsed time (s)'); ylabel('Deg/s')
+ saveas(gcf, '..\..\Figures\Grossman_Tests\Velocity.png')
 
  figure(2); 
- plot(DownsampledTimeElapsed, PositionX, ...
-     DownsampledTimeElapsed, PositionY, ...
-     DownsampledTimeElapsed, PositionZ)
+ plot(DownsampledTimeElapsedOfInterest, PositionX, ...
+     DownsampledTimeElapsedOfInterest, PositionY, ...
+     DownsampledTimeElapsedOfInterest, PositionZ)
+ title('Position vs. Time'); 
+ xlabel('Elapsed Time (s)'); ylabel('Change in position (deg)'); 
+  saveas(gcf, '..\..\Figures\Grossman_Tests\Position.png')
+
  
  %{
  figure(3); 
@@ -109,3 +123,6 @@ plot(DownsampledTimeElapsed, CalibratedFilteredXGyro, ...
       FrequenciesOfInterest, abs(YFrequencyComponentOfInterest), ...
       FrequenciesOfInterest, abs(ZFrequencyComponentOfInterest))
   legend('Roll', 'Pitch', 'Yaw')
+  title('Frequency Component'); 
+  xlabel('Hz'); ylabel('Magnitude');
+   saveas(gcf, '..\..\Figures\Grossman_Tests\Frequency.png')
