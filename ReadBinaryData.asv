@@ -1,0 +1,11 @@
+MeasurementFormats = ...
+    {'uint' 'float' 'float' 'float' 'float' 'float' 'float'}; 
+MeasurementLengths = [4 4 4 4 4 4 4];
+R = cell(1, numel(MeasurementFormats)); 
+fid = ...
+    fopen('../../Data/Terrain_20120913_YEI006/Figure8_20120913_YEI006.dat', ...
+    'rb'); 
+for i = 1:numel(MeasurementFormats)
+    fseek(fid, sum(MeasurementLengths(1:i-1))
+    
+
