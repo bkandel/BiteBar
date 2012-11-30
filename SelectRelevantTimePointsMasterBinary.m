@@ -1,6 +1,7 @@
 clear; clc; close all; 
 %RootDirectory = '../../Data/GrossmanTests/GrossmanTests/'; 
-RootDirectory = '../../Data/Grossman_20120913_YEI006/'; 
+%RootDirectory = '../../Data/Grossman_20120913_YEI006/'; 
+RootDirectory = '../../Data/Terrain_20120913_YEI006/'; 
 FileList = dir(strcat(RootDirectory, '*YEI*.txt')); 
 FileList(1) = []; 
 FileList(1) = []; % clean up file listing

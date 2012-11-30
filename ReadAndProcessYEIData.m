@@ -1,4 +1,9 @@
-clear; clc; close all
+clear; clc; close all; % needs to be fixed
+
+
+
+
+
 %% Define Constants and Read Data
 ResampleRate = 500; % Hz
 DownsampleFactor = 2; 
