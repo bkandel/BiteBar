@@ -29,3 +29,11 @@ data(4).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values
  data(7).Directory = '../../Data/Terrain_20120921_007YEI_008YEI/';
  data(7).Format = 'Binary'; 
  data(7).CalibrationFile =  '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
+ 
+ data(8).Directory = '../../Data/YEIWalkRun/'; 
+ data(8).Format = 'Text'; 
+ data(8).CalibrationFile =  '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
+ 
+ data(9).Directory = '../../Data/GrossmanData_20120921_007YEI_008YEI/';
+ data(9).Format = 'Binary'; 
+ data(9).CalibrationFile =  '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
