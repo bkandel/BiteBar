@@ -1,4 +1,8 @@
-clear; clc; close all;
+ls
+;s
+
+
+lllclear; clc; close all;
 %% Define Constants 
 ResampleRate = 500; % Hz
 DownsampleFactor = 2; 
