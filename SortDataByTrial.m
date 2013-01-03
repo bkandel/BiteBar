@@ -35,7 +35,7 @@ RunInPlaceIndices = Indices(RunInPlace > 0 );
 RunInPlaceLength = length(RunInPlaceIndices); 
 
 WalkInPlace = cellfun(@isempty, strfind(Data.Filename, 'WIP') ) == 0 + ...
-    cellfun(@ismpty, strfind(Data.Filename, 'WalkInPlace') ) == 0 ; 
+    cellfun(@isempty, strfind(Data.Filename, 'WalkInPlace') ) == 0 ; 
 WalkInPlaceIndices = Indices( WalkInPlace > 0 ) ; 
 WalkInPlaceLength = length(WalkInPlaceIndices); 
 
@@ -56,8 +56,8 @@ RunGrassShoesLength = length(RunGrassShoesIndices);
 WalkGrassShoes = cellfun(@isempty, strfind(Data.Filename, 'WGS') ) == 0 + ...
     cellfun(@isempty, strfind(Data.Filename, 'WalkShoesGrass') ) == 0 + ...
     cellfun(@isempty, strfind(Data.Filename, 'WALKSHOESGRASS') ) == 0; 
-WalkShoesGrassIndices = Indices( WalkShoesGrass > 0 ) ; 
-WalkShoesGrassLength = length(WalkShoesGrass); 
+WalkGrassShoesIndices = Indices( WalkGrassShoes > 0 ) ; 
+WalkGrassShoesLength = length(WalkGrassShoesIndices); 
 
 RunConcreteShoes = cellfun(@isempty, strfind(Data.Filename, 'RCS') ) == 0 + ...
     cellfun(@isempty, strfind(Data.Filename, 'RunShoesConcrete') ) == 0 + ...
@@ -66,7 +66,7 @@ RunConcreteShoesIndices = Indices(RunConcreteShoes > 0 );
 RunConcreteShoesLength = length(RunConcreteShoesIndices); 
 
 WalkConcreteShoes = cellfun(@isempty, strfind(Data.Filename, 'WCS') ) == 0 + ...
-    cellfun(@isempty, strfind(Data.FileName, 'WalkShoesConcrete') ) == 0 + ...
+    cellfun(@isempty, strfind(Data.Filename, 'WalkShoesConcrete') ) == 0 + ...
     cellfun(@isempty, strfind(Data.Filename, 'WALKSHOESCONCRETE') ) == 0; 
 WalkConcreteShoesIndices = Indices(WalkConcreteShoes > 0 ) ; 
 WalkConcreteShoesLength = length(WalkConcreteShoesIndices); 
@@ -79,7 +79,7 @@ RunGrassBarefootLength = length(RunGrassBarefootIndices);
 
 WalkGrassBarefoot = cellfun(@isempty, strfind(Data.Filename, 'WGB') ) == 0 + ...
     cellfun(@isempty, strfind(Data.Filename, 'WalkBareGrass') ) == 0 + ...
-    cellfun(@isempty, strfind('WALKBAREGRASS') ) == 0; 
+    cellfun(@isempty, strfind(Data.Filename, 'WALKBAREGRASS') ) == 0; 
 WalkGrassBarefootIndices = Indices( WalkGrassBarefoot > 0 ) ; 
 WalkGrassBarefootLength = length(WalkGrassBarefootIndices); 
 

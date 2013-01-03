@@ -14,83 +14,64 @@ Data.PrincipalYFrequency = RawData{6};
 Data.PrincipalZFrequency = RawData{7}; 
 
 Indices = 1:length(Data.Filename); 
-
 SortDataByTrial; % define where to find data
 
 %% Prepare data for plotting
-AllFrequencyData = vertcat(Data.PrincipalXFrequency(RunConcreteShoesIndices), ...
-    Data.PrincipalZFrequency(RunConcreteShoesIndices ),...
-    Data.PrincipalYFrequency( RunConcreteShoesIndices ), ...
-    Data.PrincipalXFrequency(RunInPlaceIndices) , ...
-    Data.PrincipalZFrequency(RunInPlaceIndices ), ...
-    Data.PrincipalYFrequency( RunInPlaceIndices ), ...
-    Data.PrincipalXFrequency(RunGrassShoesIndices) , ...
-    Data.PrincipalZFrequency(RunGrassShoesIndices ), ...
-    Data.PrincipalYFrequency( RunGrassShoesIndices ) ); 
-
-AllGyroData = vertcat(Data.MaxXGyro(RunConcreteShoesIndices), ...
-    Data.MaxZGyro(RunConcreteShoesIndices ),...
-    Data.MaxYGyro( RunConcreteShoesIndices ), ...
-    Data.MaxXGyro(RunInPlaceIndices) , ...
-    Data.MaxZGyro(RunInPlaceIndices ), ...
-    Data.MaxYGyro( RunInPlaceIndices ), ...
-    Data.MaxXGyro(RunGrassShoesIndices) , ...
-    Data.MaxZGyro(RunGrassShoesIndices ), ...
-    Data.MaxYGyro( RunGrassShoesIndices ) ); 
+GetYEIDataForPlotting; 
 
 %% Define grouping variables
-GroupByTrial = cell(length(AllFrequencyData), 1 ); 
-[GroupByTrial{1: ...
-    (3*RunConcreteShoesLength)}] = deal('RunConcreteShoes'); 
-[GroupByTrial{(3 * RunConcreteShoesLength + 1) :  ...
-    (3 * RunConcreteShoesLength + 3 * RunInPlaceLength) } ] = ...
-    deal('RunInPlace'); 
-[GroupByTrial{ ( 3 * RunConcreteShoesLength + 3 * RunInPlaceLength + 1 ) : ...
-  (3*RunConcreteShoesLength + 3*RunInPlaceLength + 3*RunGrassShoesLength)}] = ...
-    deal('RunGrassShoes'); 
+RunTrialLengths = [RunConcreteShoesLength RunInPlaceLength RunGrassShoesLength]; 
+RunTrialNames = {'RunConcreteShoes', 'RunInPlace', 'RunGrassShoes'}; 
+[GroupByTrialRun, GroupByChannelRun] = ...
+    GenerateGroupVariables(RunFrequencyData, ...
+    RunTrialNames, RunTrialLengths);
+GRun           = cell(1:length(GroupByTrialRun), 2); 
+GRun{1:end, 2} = GroupByTrialRun; 
+GRun{1:end, 1} = GroupByChannelRun; 
 
-LengthTrialOne = length(Data.PrincipalXFrequency(RunConcreteShoesIndices)); 
-LengthTrialTwo = length(Data.PrincipalXFrequency(RunInPlaceIndices) ); 
-LengthTrialThree = length(Data.PrincipalXFrequency(RunGrassShoesIndices)); 
+WalkTrialLengths = ...
+    [WalkConcreteShoesLength WalkInPlaceLength WalkGrassShoesLength]; 
+WalkTrialNames = {'WalkConcreteShoes', 'WalkInPlace', 'WalkGrassShoes'}; 
+[GroupByTrialWalk, GroupByChannelWalk] = ...
+    GenerateGroupVariables(WalkFrequencyData, WalkTrialNames, WalkTrialLengths); 
+GWalk       = cell(1:length(GroupByTrialWalk), 2); 
+GWalk{1:end, 2} = GroupByTrialWalk; 
+GWalk{1:end, 1} = GroupByChannelWalk; 
 
-[GroupByChannel{1:LengthTrialOne}] = deal('Roll'); 
-[GroupByChannel{(LengthTrialOne+1):(2 * LengthTrialOne) }] = deal('Pitch'); 
-[GroupByChannel{(LengthTrialOne * 2 + 1):(3 * LengthTrialOne) }] = deal('Yaw'); 
-[GroupByChannel{(3 * LengthTrialOne + 1) : ...
-    (3 * LengthTrialOne + LengthTrialTwo) } ] = deal('Roll'); 
-[GroupByChannel{ (3 * LengthTrialOne + LengthTrialTwo + 1) : ...
-    ( 3 * LengthTrialOne + 2 * LengthTrialTwo) }] = deal('Pitch'); 
-[GroupByChannel{ ( 3 * LengthTrialOne + 2 * LengthTrialTwo + 1) : ...
-    ( 3 * LengthTrialOne + 3 * LengthTrialTwo) }] = deal('Yaw'); 
-[GroupByChannel{ ( 3 * LengthTrialOne + 3 * LengthTrialTwo + 1) : ...
-    ( 3 * LengthTrialOne + 3 * LengthTrialTwo + LengthTrialThree ) } ] = ...
-    deal('Roll'); 
-[GroupByChannel{ (3*LengthTrialOne + ...
-    3*LengthTrialTwo + LengthTrialThree + 1) : ...
-    (3*LengthTrialOne + 3*LengthTrialTwo + 2*LengthTrialThree) } ] = ...
-    deal('Pitch'); 
-[GroupByChannel{ ( 3*LengthTrialOne + 3*LengthTrialTwo + ...
-    2*LengthTrialThree + 1) : ...
-    (3*LengthTrialOne + 3*LengthTrialTwo + 3*LengthTrialThree) } ] = ...
-    deal('Yaw');
-    
-    
-
-G = cell(1:length(GroupByTrial), 2); 
-G{1:end, 2} = GroupByTrial; 
-G{1:end, 1} = GroupByChannel; 
+ShakeTrialLengths = [HorizontalShakeLength VerticalShakeLength]; 
+ShakeTrialNames = {'HorizontalShake', 'VerticalShake'}; 
+[GroupByTrialShake, GroupByChannelShake] = ...
+    GenerateGroupVariables(ShakeFrequencyData, ShakeTrialNames, ...
+    ShakeTrialLenghts); 
+GShake = cell(1:length(GroupByTrialShake), 2); 
+GShake{1:end, 2} = GroupByTrialShake; 
+GShake{1:end, 1} = GroupByChannelShake; 
 
 %% Plot
 screen_size = get(0, 'ScreenSize');
 figure(1); 
-boxplot(AllFrequencyData, G, 'colorgroup', GroupByChannel)
-title('Principal Frequency'); ylabel('Frequency (Hz)');
+boxplot(RunFrequencyData, GRun, 'colorgroup', GroupByChannelRun)
+title('Principal Frequency for Running'); ylabel('Frequency (Hz)');
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/BoxplotPeakFreqs.png')
-figure(2); 
-boxplot(AllGyroData, G, 'colorgroup', GroupByChannel)
-title('Maximum Velocities'); ylabel('Velocity (deg/s)'); 
-set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/BoxplotPeakVelocities.png')
+print(gcf, '-dpng', '-r150', '../../Figures/BoxplotPeakFreqsRun.png')
 
+figure(2); 
+boxplot(RunGyroData, GRun, 'colorgroup', GroupByChannelRun)
+title('Maximum Velocities for Running'); ylabel('Velocity (deg/s)'); 
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
+print(gcf, '-dpng', '-r150', '../../Figures/BoxplotPeakVelocitiesRun.png')
+
+figure(3); 
+boxplot(WalkFrequencyData, GWalk, 'colorgroup', GroupByChannelWalk)
+title('Principal Frequency for Walking'); ylabel('Frequency (Hz)');
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
+print(gcf, '-dpng', '-r150', '../../Figures/BoxplotPeakFreqsWalk.png')
+
+figure(4); 
+boxplot(WalkGyroData, GWalk, 'colorgroup', GroupByChannelWalk)
+title('Maximum Velocities for Walking'); ylabel('Velocity (deg/s)'); 
+set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
+print(gcf, '-dpng', '-r150', '../../Figures/BoxplotPeakVelocitiesWalk.png')
+
+f
 

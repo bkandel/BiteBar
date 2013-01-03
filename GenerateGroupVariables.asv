@@ -1,11 +1,10 @@
 function [GroupByTrial, GroupByChannel ] = ...
     GenerateGroupVariables(Data, TrialNames, TrialLengths)
 
-
+LengthTrialOne = TrialLengths(1); LengthTrialTwo = TrialLengths(2);
+LengthTrialThree = TrialLengths(3);
     
 if length(TrialNames) == 3
-    LengthTrialOne = TrialLengths(1); LengthTrialTwo = TrialLengths(2);
-    LengthTrialThree = TrialLengths(3);
     GroupByTrial = cell(length(Data), 1);
     [GroupByTrial{1:...
         (3 * TrialLengths(1) ) } ] = deal(TrialNames{1});
@@ -38,8 +37,6 @@ if length(TrialNames) == 3
     
 elseif length(TrialNames) == 2
     GroupByTrial = cell(length(Data), 1);
-    LengthTrialOne = TrialLengths(1); LengthTrialTwo = TrialLengths(2);
-    
     [GroupByTrial{1:...
         (3 * TrialLengths(1) ) } ] = deal(TrialNames{1});
     [GroupByTrial{(3 * TrialLengths(1) + 1 ) : ...
@@ -56,7 +53,6 @@ elseif length(TrialNames) == 2
     
 elseif length(TrialNames) == 1
     GroupByTrial = cell(length(Data), 1); 
-    LengthTrialOne = TrialLengths(1);
     [GroupByTrial{1:end}] = deal(TrialNames{1}); 
       
     [GroupByChannel{1:LengthTrialOne}] = deal('Roll');
