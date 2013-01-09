@@ -19,5 +19,6 @@ FilteredData = CalculatePosition(FilteredData);
 FilteredData = CalculateFFT(FilteredData, ResampleRate, DownsampleFactor, ...
     MinFrequency, MaxFrequency); 
 FilteredData = FilterFFTData(FilteredData, NumberOfPointsInMovingAverageFilter); 
+FilteredData = CalculateAmplitudes(FilteredData); 
 
-WriteDataStatsToFile(FilteredData, OutputFilename); 
+%WriteDataStatsToFile(FilteredData, OutputFilename); 

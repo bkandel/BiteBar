@@ -1,0 +1,20 @@
+function Data = CalculateAmplitudes(Data)
+
+for i = 1:length(Data)
+   PositionIndices = 1:length(Data(i).XPosition); 
+   
+   XReversals = (Data(i).XPosition - circshift(Data(i).XPosition', 1)') .* ...
+       ( Data(i).XPosition - circshift(Data(i).XPosition', -1)'); 
+   XReversalsIndices = PositionIndices(XReversals > 0 ); 
+   for j = 2:length(XReversalsIndices)
+       XAmplitude(j-1) = abs(Data(i).XPosition(XReversalsIndices(j)) - ...
+           Data(i).XPosition(XReversalsIndices(j - 1) )); 
+   end
+   
+   
+   
+   
+   
+   Data.XAmplitude = XAmplitude; 
+end
+

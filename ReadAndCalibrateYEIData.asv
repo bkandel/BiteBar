@@ -28,10 +28,14 @@ for j = 1:length(data)
             UncalibratedData(i).YGyro = RawInputData{3}; 
             UncalibratedData(i).ZGyro = RawInputData{4}; 
         end
-        fclose(fid); 
         %% Calibrate
         CalibratedData(i).Filename = ...
-            FileInformation{1}{k};
+            FileInformation{1}{k}; 
+        
+        if j > 5
+            fprintf(strcat('i is', int2str(i), ' j is ', int2str(j), ...
+                CalibratedData(i).Filename, '\n') ) 
+        end
         
         CalibratedData(i).TimeInSeconds = ...
             ConvertChipMSTimeToSeconds(...
