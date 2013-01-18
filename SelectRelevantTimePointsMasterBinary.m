@@ -6,7 +6,6 @@ clear; clc; close all;
 RootDirectory = '../../Data/GrossmanData_20120921_007YEI_008YEI/';
 FileList = dir(strcat(RootDirectory, '*YEI*.txt')); 
 
-
 for i = 1:length(FileList)
     FileName = strcat(RootDirectory, FileList(i).name); 
     fid = fopen(FileName); 
@@ -19,7 +18,9 @@ for i = 1:length(FileList)
         [data{2} data{3} data{4}], FileName); 
     close; 
     FileNameDataFile = fopen(strcat(RootDirectory, 'FileData.csv'), 'a'); 
-    fprintf(FileNameDataFile, '%s,%f, %f, \n', FileName, X1, X2); 
+    for j = 1:length(X1)
+        fprintf(FileNameDataFile, '%s,%d,%f,%f,\n', FileName, j, X1(j), X2(j));
+    end
     fclose(FileNameDataFile); 
 end
 fclose('all')

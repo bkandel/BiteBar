@@ -25,8 +25,8 @@ for i = 1:length(FileList)
     FileNameDataFile = fopen(strcat(RootDirectory, 'FileData.csv'), 'a'); 
     for j = 1:length(X1)        
         fprintf(FileNameDataFile, '%s,%d,%f,%f,\n', FileName, j, X1(j), X2(j));
+        fclose(FileNameDataFile);
     end
-    fclose(FileNameDataFile);
 end
 fclose('all')
 close all; 

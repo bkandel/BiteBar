@@ -10,22 +10,47 @@ function [X1 X2] = SelectRelevantTimePoints(TimeElapsed, SensorData, Title)
 Deltas = diff(TimeElapsed); 
 scrsz = get(0,'ScreenSize');
 figure('Position',[scrsz(3)*0.07 scrsz(4)/8 scrsz(3)/2 scrsz(4)*0.75])
+subplot(2, 1, 1); 
 plot(TimeElapsed, SensorData(:, 1), TimeElapsed, SensorData(:,2), ...
     TimeElapsed, SensorData(:, 3))
-title(Title)
-hold on; 
-FinalCoordinates = 0; 
+title(Title); hold on; 
 
+subplot(2, 1, 2); 
+XPosition = cumtrapz(TimeElapsed, SensorData(:,1)); 
+YPosition = cumtrapz(TimeElapsed, SensorData(:, 2)); 
+ZPosition = cumtrapz(TimeElapsed, SensorData(:, 3)); 
+%correct for drift
+XPosition = XPosition - mean(XPosition); 
+YPosition = YPosition - mean(YPosition); 
+ZPosition = ZPosition - mean(ZPosition); 
+
+plot(TimeElapsed, XPosition, ...
+    TimeElapsed, YPosition, ...
+    TimeElapsed, ZPosition); 
+title('Position'); hold on; 
+
+FinalCoordinates = 0; SatisfactorySelection = 0; 
+
+i = 1; 
 while(FinalCoordinates == 0) 
-    display('Click on the plot to indicate where the trial begins.')
-[X1 Y1] = ginput(1);
-display('Now click on the plot to indicate where the trial ends.')
-[X2 Y2] = ginput(1);
-plot(X1:mean(Deltas):X2, ...
-    zeros(length(X1:mean(Deltas):X2), 1), ...
-    'y', 'LineWidth', 5)
-FinalCoordinates = ...
-    input('Is this time period satisfactory?  1 = yes, 0 = no.\n'); 
+    while(SatisfactorySelection == 0)
+        display('Click on the plot to indicate where the trial begins.')
+        [X1(i) Y1] = ginput(1);
+        display('Now click on the plot to indicate where the trial ends.')
+        [X2(i) Y2] = ginput(1);
+        for j = 1:2
+            subplot(2, 1, j);
+            plot(X1(i):mean(Deltas):X2(i), ...
+                zeros(length(X1(i):mean(Deltas):X2(i)), 1), ...
+                'y', 'LineWidth', 5)
+        end
+        SatisfactorySelection = ...
+            input('Is this time period satisfactory?  1 = yes, 0 = no.\n'); 
+    end
+    i = i + 1; 
+    FinalCoordinates = ...
+        input('Have you selected all relevant sections? 1 = yes, 0 = no.\n');
+    SatisfactorySelection = FinalCoordinates; 
 end
 
 
