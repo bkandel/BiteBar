@@ -2,23 +2,24 @@ clear all; close; clc;
 %% Read Raw Data
 DataFile = '../../Data/DataStats.csv'; 
 fid = fopen(DataFile);
-RawData = textscan( fid, '%s%f%f%f%f%f%f%f%f%f%f%f%f', ...
+RawData = textscan( fid, '%s%d%f%f%f%f%f%f%f%f%f%f%f%f', ...
     'headerlines', 1, 'delimiter', ','); 
 fclose( fid ); 
 
-Data.Filename = RawData{1}; 
-Data.MaxXGyro = RawData{2}; 
-Data.MaxYGyro = RawData{3}; 
-Data.MaxZGyro = RawData{4}; 
-Data.PrincipalXFrequency = RawData{5}; 
-Data.PrincipalYFrequency = RawData{6}; 
-Data.PrincipalZFrequency = RawData{7}; 
-Data.MaxXAmplitude = RawData{8}; 
-Data.MaxYAmplitude = RawData{9}; 
-Data.MaxZAmplitude = RawData{10}; 
-Data.MedianXAmplitude = RawData{11}; 
-Data.MedianYAmplitude = RawData{12};
-Data.MedianZAmplitude = RawData{13}; 
+Data.Filename            = RawData{1};
+Data.Run                 = RawData{2}; 
+Data.MaxXGyro            = RawData{3}; 
+Data.MaxYGyro            = RawData{4}; 
+Data.MaxZGyro            = RawData{5}; 
+Data.PrincipalXFrequency = RawData{6}; 
+Data.PrincipalYFrequency = RawData{7}; 
+Data.PrincipalZFrequency = RawData{8}; 
+Data.MaxXAmplitude       = RawData{9}; 
+Data.MaxYAmplitude       = RawData{10}; 
+Data.MaxZAmplitude       = RawData{11}; 
+Data.MedianXAmplitude    = RawData{12}; 
+Data.MedianYAmplitude    = RawData{13};
+Data.MedianZAmplitude    = RawData{14}; 
 
 Indices = 1:length(Data.Filename); 
 SortDataByTrial; % define where to find data
