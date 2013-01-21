@@ -1,7 +1,8 @@
 clear; clc; close all; 
-RootDirectory{1} = '../../Data/GrossmanTests/GrossmanTests/AllData/'; 
-RootDirectory{2} = '../../Data/YEIJump/'; 
-RootDirectory {3}= '../../Data/YEI_20120820/YEI_Data_20120820/AllData/'; 
+RootDirectory{1} = '../../Data/GrossmanTests/GrossmanTests/AllData/';
+RootDirectory{2} = '../../Data/YEIJump/';
+RootDirectory{3}= '../../Data/YEI_20120820/YEI_Data_20120820/AllData/';
+RootDirectory{4} = '../../Data/YEIWalkRun/';
 
 for k = 1:length(RootDirectory)
     movefile(strcat(RootDirectory{k}, 'FileData.csv'), ...
