@@ -5,6 +5,8 @@ RootDirectory{3} = '../../Data/Terrain_20120913_YEI006/';
 RootDirectory{4} =  '../../Data/Terrain_20120921_007YEI_008YEI/';
 RootDirectory{5} = '../../Data/GrossmanData_20120921_007YEI_008YEI/';
 for k = 1:length(RootDirectory)
+    movefile(strcat(RootDirectory{k}, 'FileData.csv'), ...
+        strcat(RootDirectory{k}, 'FileDataBackup.csv'));
     FileList = dir(strcat(RootDirectory{k}, '*YEI*.txt'));
     for i = 1:length(FileList)
         FileName = strcat(RootDirectory{k}, FileList(i).name);
