@@ -1,11 +1,18 @@
 clear; clc; close all; 
-RootDirectory{1} = '../../Data/Grossman_20120913_YEI006/'; 
-RootDirectory{2} = '../../Data/Terrain_20120913_YEI006/'; 
-RootDirectory{3} =  '../../Data/Terrain_20120921_007YEI_008YEI/';
-RootDirectory{4} = '../../Data/GrossmanData_20120921_007YEI_008YEI/';
+% RootDirectory{1} = '../../Data/Grossman_20120913_YEI006/'; 
+% RootDirectory{2} = '../../Data/Terrain_20120913_YEI006/'; 
+% RootDirectory{3} =  '../../Data/Terrain_20120921_007YEI_008YEI/';
+% RootDirectory{4} = '../../Data/GrossmanData_20120921_007YEI_008YEI/';
+RootDirectory{1} = '../../Data/Grossman_20130115_009YEI/'; 
+RootDirectory{2} = '../../Data/Terrain_20130115_009YEI/'; 
+RootDirectory{3} = '../../Data/Grossman_20130128_010YEI/';
+RootDirectory{4} = '../../Data/Terrain_20130128_010YEI/';
+
 for k = 1:length(RootDirectory)
-    movefile(strcat(RootDirectory{k}, 'FileData.csv'), ...
-        strcat(RootDirectory{k}, 'FileDataBackup.csv'));
+    if exist(strcat(RootDirectory{k}, 'FileData.csv'), 'file')
+        movefile(strcat(RootDirectory{k}, 'FileData.csv'), ...
+            strcat(RootDirectory{k}, 'FileDataBackup.csv'));
+    end
     FileList = dir(strcat(RootDirectory{k}, '*YEI*.txt'));
     for i = 1:length(FileList)
         FileName = strcat(RootDirectory{k}, FileList(i).name);

@@ -42,15 +42,15 @@ data(4).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values
  data(10).Format = 'Binary'; 
  data(10).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
  
- data(11).Directory = '../../Data/Terrain_20130115_009YEI/'; 
- data(11).Format = 'Binary'; 
- data(11).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
+data(10).Directory = '../../Data/Grossman_20130115_009YEI/'; 
+ data(10).Format = 'Binary'; 
+ data(10).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
  
- data(12).Directory = '../../Data/Grossman_20130128_010YEI/';
- data(12).Format = 'Binary'; 
- data(12).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
+ data(10).Directory = '../../Data/Grossman_20130115_009YEI/'; 
+ data(10).Format = 'Binary'; 
+ data(10).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
  
- data(13).Directory = '../../Data/Terrain_20130128_010YEI/';
- data(13).Format = 'Binary'; 
- data(13).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
+ data(10).Directory = '../../Data/Grossman_20130115_009YEI/'; 
+ data(10).Format = 'Binary'; 
+ data(10).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
  
