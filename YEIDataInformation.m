@@ -52,5 +52,11 @@ data(4).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values
  
  data(13).Directory = '../../Data/Terrain_20130128_010YEI/';
  data(13).Format = 'Binary'; 
- data(13).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
+ data(13).CalibrationFile = '../../Calibrations/Calibration_20120826/Fitted_Values.mat';
+ 
+% not sure whether to include this data--it was from before we fixed the
+% delays in the sensor
+% data(14).Directory =  '../../Data/WalkRunData/WalkRunData/AllData/';
+% data(14).Format = 'Text'; 
+% data(14).CalibrationFile =  '../../Calibrations/Calibration_20120826/Fitted_Values.mat'; 
  

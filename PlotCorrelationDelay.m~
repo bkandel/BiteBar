@@ -8,6 +8,7 @@
 begin: 55
 end: 102
 subject 2: 
+%}
 %{  
 for subject 10
 Begin1 = 404; 
@@ -29,6 +30,12 @@ Begin1 = 55;
 End1 = 102; 
 Begin2 = 103; 
 End2 = 105;
+% WalkRun
+Begin1 = 441; 
+End1 = 580; 
+Begin2 = 581; 
+End2 = 582; 
+
 MaxCorrelationsUnconstrained = zeros(length(Begin1:End1), 1); 
 close; clear Correlation; 
 for RunNumber = Begin1:End1
@@ -37,25 +44,25 @@ for RunNumber = Begin1:End1
     
     MaxOffset = 125;
     for Offset = 1:MaxOffset
-        tmp = corrcoef(FilteredData(RunNumber).XGyro, ...
-            circshift(FilteredData(RunNumber).YGyro', Offset)');
+        tmp = corrcoef(FilteredData(RunNumber).YGyro, ...
+            circshift(FilteredData(RunNumber).ZGyro', Offset)');
         Correlation(Offset) = tmp(2, 1);
     end
     MaxCorrelationsUnconstrained(RunNumber - Begin1 + 1) = max(Correlation);
     
-%     DelayIndices = 1:MaxOffset;
-%     TimeStepVector = FilteredData(RunNumber).TimeInSeconds - ...
-%         circshift(FilteredData(RunNumber).TimeInSeconds', 1)';
-%     MeanTimeStep = mean(TimeStepVector(2:end));
-%     DelayInSeconds = DelayIndices .* MeanTimeStep;
-%     
-%     plot(DelayInSeconds, Correlation, 'LineWidth', 2);
-%     ylim([-0.2 1])
-%     title(strcat('Correlation Between Roll and Pitch as Function of Delay', ...
-%         FilteredData(RunNumber).Filename) );
-%         %'FontSize', 16)
-%     xlabel('Delay (s)', 'FontSize', 14)
-%     ylabel('Correlation', 'FontSize', 14)
+    DelayIndices = 1:MaxOffset;
+    TimeStepVector = FilteredData(RunNumber).TimeInSeconds - ...
+        circshift(FilteredData(RunNumber).TimeInSeconds', 1)';
+    MeanTimeStep = mean(TimeStepVector(2:end));
+    DelayInSeconds = DelayIndices .* MeanTimeStep;
+    
+    plot(DelayInSeconds, Correlation, 'LineWidth', 2);
+    ylim([-0.2 1])
+    title(strcat('Correlation Between Roll and Pitch as Function of Delay', ...
+        FilteredData(RunNumber).Filename) );
+        %'FontSize', 16)
+    xlabel('Delay (s)', 'FontSize', 14)
+    ylabel('Correlation', 'FontSize', 14)
 %     pause(0.5); 
 end
  

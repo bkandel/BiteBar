@@ -3,30 +3,95 @@
 
 % first, run ReadAndProcessYEIData.m or ReadRotateAndProcessYEIData.m so
 % that you have a "FilteredData" struct.
+%{
+ %subject 1: 
+begin: 55
+end: 102
+subject 2: 
+%}
+%{  
+for subject 10
+Begin1 = 404; 
+End1 = 419; 
+Begin2 = 398; 
+End2 = 398;
+%}
+
+%{
+%for subject 6 
+Begin1 = 207; 
+End1 = 221; 
+Begin2 = 193; 
+End2 = 195;
+%}
+
+% for subject 5
+Begin1 = 55; 
+End1 = 102; 
+Begin2 = 103; 
+End2 = 105;
+% WalkRun
+Begin1 = 441; 
+End1 = 580; 
+Begin2 = 581; 
+End2 = 582; 
+
+MaxCorrelationsUnconstrained = zeros(length(Begin1:End1), 1); 
 close; clear Correlation; 
-RunNumber = 407 ; FilteredData(RunNumber).Filename
-% make sure it's an interesting run in unconstrained conditions.  
-
-MaxOffset = 125; 
-for Offset = 1:MaxOffset
-tmp = corrcoef(FilteredData(RunNumber).XGyro, ...
-    circshift(FilteredData(RunNumber).YGyro', Offset)'); 
-Correlation(Offset) = tmp(2, 1); 
+for RunNumber = Begin1:End1
+    FilteredData(RunNumber).Filename
+    % make sure it's an interesting run in unconstrained conditions.
+    
+    MaxOffset = 125;
+    for Offset = 1:MaxOffset
+        tmp = corrcoef(FilteredData(RunNumber).XGyro, ...
+            circshift(FilteredData(RunNumber).YGyro', Offset)');
+        Correlation(Offset) = tmp(2, 1);
+    end
+    MaxCorrelationsUnconstrained(RunNumber - Begin1 + 1) = max(Correlation);
+    
+%     DelayIndices = 1:MaxOffset;
+%     TimeStepVector = FilteredData(RunNumber).TimeInSeconds - ...
+%         circshift(FilteredData(RunNumber).TimeInSeconds', 1)';
+%     MeanTimeStep = mean(TimeStepVector(2:end));
+%     DelayInSeconds = DelayIndices .* MeanTimeStep;
+%     
+%     plot(DelayInSeconds, Correlation, 'LineWidth', 2);
+%     ylim([-0.2 1])
+%     title(strcat('Correlation Between Roll and Pitch as Function of Delay', ...
+%         FilteredData(RunNumber).Filename) );
+%         %'FontSize', 16)
+%     xlabel('Delay (s)', 'FontSize', 14)
+%     ylabel('Correlation', 'FontSize', 14)
+%     pause(0.5); 
 end
-
-DelayIndices = 1:MaxOffset; 
-TimeStepVector = FilteredData(RunNumber).TimeInSeconds - ...
-    circshift(FilteredData(RunNumber).TimeInSeconds', 1)'; 
-MeanTimeStep = mean(TimeStepVector(2:end)); 
-DelayInSeconds = DelayIndices .* MeanTimeStep; 
-
-plot(DelayInSeconds, Correlation, 'LineWidth', 2); 
-ylim([-0.2 1])
-title(strcat('Correlation Between Roll and Pitch as Function of Delay', ...
-    FilteredData(RunNumber).Filename) ); 
-    %'FontSize', 16)
-xlabel('Delay (s)', 'FontSize', 14)
-ylabel('Correlation', 'FontSize', 14)
-
+ 
+MaxCorrelationsRIP = zeros(length(Begin2:End2), 1);
+for RunNumber = Begin2:End2
+    MaxOffset = 125;
+    for Offset = 1:MaxOffset
+        tmp = corrcoef(FilteredData(RunNumber).XGyro, ...
+            circshift(FilteredData(RunNumber).YGyro', Offset)');
+        Correlation(Offset) = tmp(2, 1);
+    end
+    MaxCorrelationsRIP(RunNumber - Begin2 + 1) = max(Correlation);
+        
+    DelayIndices = 1:MaxOffset;
+    TimeStepVector = FilteredData(RunNumber).TimeInSeconds - ...
+        circshift(FilteredData(RunNumber).TimeInSeconds', 1)';
+    MeanTimeStep = mean(TimeStepVector(2:end));
+    DelayInSeconds = DelayIndices .* MeanTimeStep;
+    
+    plot(DelayInSeconds, Correlation, 'LineWidth', 2);
+    ylim([-0.2 1])
+    title(strcat('Correlation Between Roll and Pitch as Function of Delay', ...
+        FilteredData(RunNumber).Filename) );
+        %'FontSize', 16)
+    xlabel('Delay (s)', 'FontSize', 14)
+    ylabel('Correlation', 'FontSize', 14)
+end
+MaxCorrelationsUnconstrained
+MaxCorrelationsRIP
+[Diff P ] = ttest2(MaxCorrelationsUnconstrained, MaxCorrelationsRIP)
 
 
