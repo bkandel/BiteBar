@@ -1,34 +1,39 @@
-function Data = CalculateAmplitudes(Data)
-
+function Data = ...
+    CalculateAmplitudes(Data, AmplitudeThreshold, TimeThreshold, SamplingRate)
+% CalculateAmplitudes calculates the amplitude of transients from movement
+% data.  Transients that are too small (less than AmplitudeThreshold) or
+% too short (less than TimeThreshold) are discarded. 
+TimeThresholdInTimepoints = TimeThreshold * SamplingRate / 1000; 
 for i = 1:length(Data)
-   PositionIndices = 1:length(Data(i).XPosition); 
-   
-   XReversals = (Data(i).XPosition - circshift(Data(i).XPosition', 1)') .* ...
-       ( Data(i).XPosition - circshift(Data(i).XPosition', -1)'); 
-   XReversalsIndices = PositionIndices(XReversals > 0 ); 
-   for j = 2:length(XReversalsIndices)
-       XAmplitude(j-1) = abs(Data(i).XPosition(XReversalsIndices(j)) - ...
-           Data(i).XPosition(XReversalsIndices(j - 1) )); 
-   end
-   
-   YReversals = (Data(i).YPosition - circshift(Data(i).YPosition', 1)') .* ...
-       ( Data(i).YPosition - circshift(Data(i).YPosition', -1)');
-   YReversalsIndices = PositionIndices(YReversals > 0 );
-   for j = 2:length(YReversalsIndices)
-       YAmplitude(j-1) = abs(Data(i).YPosition(YReversalsIndices(j)) - ...
-           Data(i).YPosition(YReversalsIndices(j - 1) ));
-   end
-   
-   ZReversals = (Data(i).ZPosition - circshift(Data(i).ZPosition', 1)') .* ...
-       ( Data(i).ZPosition - circshift(Data(i).ZPosition', -1)');
-   ZReversalsIndices = PositionIndices(ZReversals > 0 );
-   for j = 2:length(ZReversalsIndices)
-       ZAmplitude(j-1) = abs(Data(i).ZPosition(ZReversalsIndices(j)) - ...
-           Data(i).ZPosition(ZReversalsIndices(j - 1) ));
-   end  
+   XAmplitude = CalculateAndTrimAmplitudes(Data(i).XPosition, ...
+       AmplitudeThreshold, TimeThresholdInTimepoints); 
+   YAmplitude = CalculateAndTrimAmplitudes(Data(i).YPosition, ...
+       AmplitudeThreshold, TimeThresholdInTimepoints); 
+   ZAmplitude = CalculateAndTrimAmplitudes(Data(i).ZPosition, ...
+       AmplitudeThreshold, TimeThresholdInTimepoints); 
    
    Data(i).XAmplitude = XAmplitude; 
    Data(i).YAmplitude = YAmplitude; 
    Data(i).ZAmplitude = ZAmplitude; 
+end
+
+end
+function AmplitudeVector = CalculateAndTrimAmplitudes(PositionVector, ...
+        AmplitudeThreshold, TimeThresholdInTimepoints)
+   PositionIndices = 1:length( PositionVector ); 
+   Reversals = (PositionVector - circshift(PositionVector', 1)') .* ...
+       ( PositionVector - circshift(PositionVector', -1)'); 
+   ReversalsIndices = PositionIndices(Reversals > 0 ); 
+   % discard transients that are too short
+   TransientLengthsInTimepoints = ...
+       ReversalsIndices - circshift(ReversalsIndices', 1)'; 
+   ReversalsIndices( ...
+       TransientLengthsInTimepoints < TimeThresholdInTimepoints ) = [];
+   for j = 2:length(ReversalsIndices)
+       AmplitudeVector(j-1) = abs(PositionVector(ReversalsIndices(j)) - ...
+           PositionVector(ReversalsIndices(j - 1) )); 
+   end
+   %discard transients that are too small
+   AmplitudeVector( AmplitudeVector < AmplitudeThreshold ) = []; 
 end
 
