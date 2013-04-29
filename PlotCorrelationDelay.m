@@ -46,10 +46,24 @@ End2 = 582;
 
 Begin1 = Subject10(1); 
 End1 = Subject10(end); 
+
+Begin1 = 420;  %walk--subject 9
+End1 = 427; 
+Begin1 = 404; % run -- subject 9
+End1 = 419; 
+% all walks
+WalkIndices = [
+    118:144 223:230 267:284 349:381 420:427 437:438
+    ]; 
+% all runs
+RunIndices = [
+    55:102 207:222 234:266 285:348 404:419 435:436
+    ];
+RunIndices=234:266;
 MaxCorrelationsUnconstrained = zeros(length(Begin1:End1), 1); 
 close; clear Correlation; 
 j = 1; 
-for RunNumber = Begin1:End1
+for RunNumber = RunIndices %Begin1:End1
     FilteredData(RunNumber).Filename
     % make sure it's an interesting run in unconstrained conditions.
     
@@ -69,21 +83,21 @@ for RunNumber = Begin1:End1
         end
         %MaxCorrelationsUnconstrained(RunNumber - Begin1 + 1) = max(Correlation);
         MaxCorrelationsUnconstrained(j) = max(Correlation);
-        j = j + 1;
         DelayIndices = 1:MaxOffset;
         TimeStepVector = FilteredData(RunNumber).TimeInSeconds - ...
             circshift(FilteredData(RunNumber).TimeInSeconds', 1)';
         MeanTimeStep = mean(TimeStepVector(2:end));
         DelayInSeconds = DelayIndices .* MeanTimeStep;
-        
-        plot(DelayInSeconds, Correlation, 'LineWidth', 2);
-        ylim([-0.2 1])
-        title(...  %strcat('Correlation Between Roll and Pitch as Function of Delay', ...
-            FilteredData(RunNumber).Filename );
-        %'FontSize', 16)
-        xlabel('Delay (s)', 'FontSize', 14)
-        ylabel('Correlation', 'FontSize', 14)
-        pause(0.1);
+        OptimalDelay(j) = DelayInSeconds(Correlation == max(Correlation)); 
+%         plot(DelayInSeconds, Correlation, 'LineWidth', 2);
+%         ylim([-0.2 1])
+%         title(...  %strcat('Correlation Between Roll and Pitch as Function of Delay', ...
+%             FilteredData(RunNumber).Filename );
+%         %'FontSize', 16)
+%         xlabel('Delay (s)', 'FontSize', 14)
+%         ylabel('Correlation', 'FontSize', 14)
+        %pause(0.1);
+        j = j + 1;
     end
 end
 

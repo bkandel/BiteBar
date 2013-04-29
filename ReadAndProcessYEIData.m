@@ -6,7 +6,7 @@ NumberOfPointsInMovingAverageFilter = 5;
 MinFrequency = 0.2; 
 MaxFrequency = 10;
 TimeThreshold = 20; % threshold for transient length in ms
-AmplitudeThreshold = 2; % threshold for transient amplitude in deg
+AmplitudeThreshold = 10; % threshold for transient amplitude in deg
 OutputFilename = '../../Data/DataStats.csv'; 
 
 %% Read, Calibrate, and Filter Data
