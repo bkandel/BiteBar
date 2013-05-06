@@ -28,8 +28,8 @@ SortDataByTrial; % define where to find data
 GetYEIDataForPlotting; 
 
 %% Define grouping variables
-RunTrialLengths = [RunConcreteShoesLength RunInPlaceLength RunGrassShoesLength]; 
-RunTrialNames = {'RunConcreteShoes', 'RunInPlace', 'RunGrassShoes'}; 
+RunTrialLengths = [RunInPlaceLength RunConcreteShoesLength RunGrassShoesLength]; 
+RunTrialNames = {'RunInPlace', 'RunConcreteShoes', 'RunGrassShoes'}; 
 [GroupByTrialRun, GroupByChannelRun] = ...
     GenerateGroupVariables(RunFrequencyData, ...
     RunTrialNames, RunTrialLengths);
@@ -38,8 +38,8 @@ GRun{1:end, 2} = GroupByTrialRun;
 GRun{1:end, 1} = GroupByChannelRun; 
 
 WalkTrialLengths = ...
-    [WalkConcreteShoesLength WalkInPlaceLength WalkGrassShoesLength]; 
-WalkTrialNames = {'WalkConcreteShoes', 'WalkInPlace', 'WalkGrassShoes'}; 
+    [WalkInPlaceLength WalkConcreteShoesLength WalkGrassShoesLength]; 
+WalkTrialNames = {'WalkInPlace', 'WalkConcreteShoes', 'WalkGrassShoes'}; 
 [GroupByTrialWalk, GroupByChannelWalk] = ...
     GenerateGroupVariables(WalkFrequencyData, WalkTrialNames, WalkTrialLengths); 
 GWalk       = cell(1:length(GroupByTrialWalk), 2); 
@@ -62,14 +62,14 @@ BoxPlotFigure = boxplot(RunFrequencyData, GRun, 'colorgroup', GroupByChannelRun)
 set(BoxPlotFigure(:, :), 'linewidth', 2); 
 title('Principal Frequency for Running'); ylabel('Frequency (Hz)');
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsRun.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsRun.svg')
 
 figure(2); 
 BoxPlotFigure = boxplot(RunGyroData, GRun, 'colorgroup', GroupByChannelRun); 
 set(BoxPlotFigure(:, :), 'LineWidth', 2); 
 title('Maximum Velocities for Running'); ylabel('Velocity (deg/s)'); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesRun.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesRun.svg')
 
 figure(3); 
 BoxPlotFigure = ...
@@ -77,7 +77,7 @@ BoxPlotFigure = ...
 set(BoxPlotFigure(:, :), 'linewidth', 2); 
 title('Maximum Amplitudes for Running'); ylabel('Amplitude (deg)'); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeRun.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeRun.svg')
 
 figure(4); 
 BoxPlotFigure = ...
@@ -85,7 +85,7 @@ BoxPlotFigure = ...
 set(BoxPlotFigure(:, :), 'linewidth', 2); 
 title('Median Amplitudes for Running'); ylabel('Amplitude (deg)'); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotMedianAmplitudeRun.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotMedianAmplitudeRun.svg')
 
 figure(5); 
 BoxPlotFigure = ...
@@ -93,14 +93,14 @@ BoxPlotFigure = ...
 set(BoxPlotFigure(:, :), 'linewidth', 2); 
 title('Principal Frequency for Walking'); ylabel('Frequency (Hz)');
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsWalk.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsWalk.svg')
 
 figure(6); 
 BoxPlotFigure = boxplot(WalkGyroData, GWalk, 'colorgroup', GroupByChannelWalk); 
 set(BoxPlotFigure(:, :), 'linewidth', 2); 
 title('Maximum Velocities for Walking'); ylabel('Velocity (deg/s)'); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesWalk.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesWalk.svg')
 
 figure(7); 
 BoxPlotFigure = ...
@@ -108,7 +108,7 @@ BoxPlotFigure = ...
 set(BoxPlotFigure(:, :), 'linewidth', 2);
 title('Maximum Amplitudes for Walking'); ylabel('Amplitude (deg)'); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeWalk.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeWalk.svg')
 
 figure(8); 
 BoxPlotFigure = ...
@@ -116,7 +116,7 @@ BoxPlotFigure = ...
 set(BoxPlotFigure(:, :), 'linewidth', 2);
 title('Median Amplitudes for Walking'); ylabel('Amplitude (deg)'); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotMedianAmplitudeWalk.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotMedianAmplitudeWalk.svg')
 
 figure(9); 
 BoxPlotFigure = ...
@@ -124,7 +124,7 @@ BoxPlotFigure = ...
 set(BoxPlotFigure(:, :), 'linewidth', 2);
 title('Principal Frequency for Shaking'); ylabel('Frequency (Hz)');
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsShake.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsShake.svg')
 
 figure(10); 
 BoxPlotFigure = ...
@@ -132,7 +132,7 @@ BoxPlotFigure = ...
 set(BoxPlotFigure(:, :), 'linewidth', 2);
 title('Maximum Velocities for Shaking'); ylabel('Velocity (deg/s)'); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesShake.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesShake.svg')
 
 figure(11); 
 BoxPlotFigure = ...
@@ -140,7 +140,7 @@ BoxPlotFigure = ...
 set(BoxPlotFigure(:, :), 'linewidth', 2);
 title('Maximum Amplitudes for Shaking'); ylabel('Amplitude (deg)'); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeShake.png')
+print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeShake.svg')
 
 figure(12); 
 BoxPlotFigure = ...
@@ -148,7 +148,7 @@ BoxPlotFigure = ...
 set(BoxPlotFigure(:, :), 'linewidth', 2);
 title('Median Amplitudes for Shaking'); ylabel('Amplitude (deg)'); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dpng', '-r150', ...
-    '../../Figures/YEIPlots/BoxplotMedianAmplitudeShake.png')
+print(gcf, '-dsvg', '-r150', ...
+    '../../Figures/YEIPlots/BoxplotMedianAmplitudeShake.svg')
 
 
