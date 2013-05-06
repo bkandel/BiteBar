@@ -29,7 +29,7 @@ GetYEIDataForPlotting;
 
 %% Define grouping variables
 RunTrialLengths = [RunInPlaceLength RunConcreteShoesLength RunGrassShoesLength]; 
-RunTrialNames = {'RunInPlace', 'RunConcreteShoes', 'RunGrassShoes'}; 
+RunTrialNames = {'Run in Place', 'Run Concrete', 'Run Grass'}; 
 [GroupByTrialRun, GroupByChannelRun] = ...
     GenerateGroupVariables(RunFrequencyData, ...
     RunTrialNames, RunTrialLengths);
@@ -39,7 +39,7 @@ GRun{1:end, 1} = GroupByChannelRun;
 
 WalkTrialLengths = ...
     [WalkInPlaceLength WalkConcreteShoesLength WalkGrassShoesLength]; 
-WalkTrialNames = {'WalkInPlace', 'WalkConcreteShoes', 'WalkGrassShoes'}; 
+WalkTrialNames = {'Walk in Place', 'Walk Concrete', 'Walk Grass'}; 
 [GroupByTrialWalk, GroupByChannelWalk] = ...
     GenerateGroupVariables(WalkFrequencyData, WalkTrialNames, WalkTrialLengths); 
 GWalk       = cell(1:length(GroupByTrialWalk), 2); 
@@ -60,95 +60,107 @@ screen_size = get(0, 'ScreenSize');
 figure(1); 
 BoxPlotFigure = boxplot(RunFrequencyData, GRun, 'colorgroup', GroupByChannelRun);
 set(BoxPlotFigure(:, :), 'linewidth', 2); 
-title('Principal Frequency for Running'); ylabel('Frequency (Hz)');
+title('Principal Frequency for Running', 'FontSize', 26);
+ylabel('Frequency (Hz)', 'FontSize', 24);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsRun.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsRun.ai')
 
 figure(2); 
 BoxPlotFigure = boxplot(RunGyroData, GRun, 'colorgroup', GroupByChannelRun); 
 set(BoxPlotFigure(:, :), 'LineWidth', 2); 
-title('Maximum Velocities for Running'); ylabel('Velocity (deg/s)'); 
+title('Maximum Velocities for Running', 'FontSize', 26)
+ylabel('Velocity (deg/s)', 'FontSize', 24); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesRun.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesRun.ai')
 
 figure(3); 
 BoxPlotFigure = ...
     boxplot(RunMaxAmplitudeData, GRun, 'colorgroup', GroupByChannelRun);
 set(BoxPlotFigure(:, :), 'linewidth', 2); 
-title('Maximum Amplitudes for Running'); ylabel('Amplitude (deg)'); 
+title('Maximum Amplitudes for Running', 'FontSize', 26); 
+ylabel('Amplitude (deg)', 'FontSize', 24); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeRun.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeRun.ai')
 
 figure(4); 
 BoxPlotFigure = ...
     boxplot(RunMedianAmplitudeData, GRun, 'colorgroup', GroupByChannelRun); 
 set(BoxPlotFigure(:, :), 'linewidth', 2); 
-title('Median Amplitudes for Running'); ylabel('Amplitude (deg)'); 
+title('Median Amplitudes for Running', 'FontSize', 26); 
+ylabel('Amplitude (deg)', 'FontSize', 24); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotMedianAmplitudeRun.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotMedianAmplitudeRun.ai')
 
 figure(5); 
 BoxPlotFigure = ...
     boxplot(WalkFrequencyData, GWalk, 'colorgroup', GroupByChannelWalk); 
 set(BoxPlotFigure(:, :), 'linewidth', 2); 
-title('Principal Frequency for Walking'); ylabel('Frequency (Hz)');
+title('Principal Frequency for Walking', 'FontSize', 26); 
+ylabel('Frequency (Hz)', 'FontSize', 24);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsWalk.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsWalk.ai')
 
 figure(6); 
 BoxPlotFigure = boxplot(WalkGyroData, GWalk, 'colorgroup', GroupByChannelWalk); 
 set(BoxPlotFigure(:, :), 'linewidth', 2); 
-title('Maximum Velocities for Walking'); ylabel('Velocity (deg/s)'); 
+title('Maximum Velocities for Walking', 'FontSize', 26); 
+ylabel('Velocity (deg/s)', 'FontSize', 24); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesWalk.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesWalk.ai')
 
 figure(7); 
 BoxPlotFigure = ...
     boxplot(WalkMaxAmplitudeData, GWalk, 'colorgroup', GroupByChannelWalk);
 set(BoxPlotFigure(:, :), 'linewidth', 2);
-title('Maximum Amplitudes for Walking'); ylabel('Amplitude (deg)'); 
+title('Maximum Amplitudes for Walking', 'FontSize', 26); 
+ylabel('Amplitude (deg)', 'FontSize', 24); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeWalk.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeWalk.ai')
 
 figure(8); 
 BoxPlotFigure = ...
     boxplot(WalkMedianAmplitudeData, GWalk, 'colorgroup', GroupByChannelWalk); 
 set(BoxPlotFigure(:, :), 'linewidth', 2);
-title('Median Amplitudes for Walking'); ylabel('Amplitude (deg)'); 
+title('Median Amplitudes for Walking', 'FontSize', 26); 
+ylabel('Amplitude (deg)', 'FontSize', 24); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotMedianAmplitudeWalk.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotMedianAmplitudeWalk.ai')
 
 figure(9); 
 BoxPlotFigure = ...
     boxplot(ShakeFrequencyData, GShake, 'colorgroup', GroupByChannelShake); 
 set(BoxPlotFigure(:, :), 'linewidth', 2);
-title('Principal Frequency for Shaking'); ylabel('Frequency (Hz)');
+title('Principal Frequency for Shaking', 'FontSize', 26); 
+ylabel('Frequency (Hz)', 'FontSize', 24);
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsShake.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotPeakFreqsShake.ai')
 
 figure(10); 
 BoxPlotFigure = ...
     boxplot(ShakeGyroData, GShake, 'colorgroup', GroupByChannelShake); 
 set(BoxPlotFigure(:, :), 'linewidth', 2);
-title('Maximum Velocities for Shaking'); ylabel('Velocity (deg/s)'); 
+title('Maximum Velocities for Shaking', 'FontSize', 26); 
+ylabel('Velocity (deg/s)', 'FontSize', 24); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesShake.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotPeakVelocitiesShake.ai')
 
 figure(11); 
 BoxPlotFigure = ...
     boxplot(ShakeMaxAmplitudeData, GShake, 'colorgroup', GroupByChannelShake);
 set(BoxPlotFigure(:, :), 'linewidth', 2);
-title('Maximum Amplitudes for Shaking'); ylabel('Amplitude (deg)'); 
+title('Maximum Amplitudes for Shaking', 'FontSize', 26); 
+ylabel('Amplitude (deg)', 'FontSize', 24); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeShake.svg')
+print(gcf, '-dill', '-r150', '../../Figures/YEIPlots/BoxplotMaxAmplitudeShake.ai')
 
 figure(12); 
 BoxPlotFigure = ...
     boxplot(ShakeMedianAmplitudeData, GShake, 'colorgroup', GroupByChannelShake); 
 set(BoxPlotFigure(:, :), 'linewidth', 2);
-title('Median Amplitudes for Shaking'); ylabel('Amplitude (deg)'); 
+title('Median Amplitudes for Shaking', 'FontSize', 26); 
+ylabel('Amplitude (deg)', 'FontSize', 24); 
 set(gcf,'PaperUnits','inches','PaperPosition',[0 0 14 7])
-print(gcf, '-dsvg', '-r150', ...
-    '../../Figures/YEIPlots/BoxplotMedianAmplitudeShake.svg')
+print(gcf, '-dill', '-r150', ...
+    '../../Figures/YEIPlots/BoxplotMedianAmplitudeShake.ai')
 
 
