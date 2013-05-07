@@ -101,6 +101,30 @@ for RunNumber = RunIndices %Begin1:End1
     end
 end
 
+%% Plotting
+% run once for WalkIndices and once for RunIndices
+WalkCors = MaxCorrelationsUnconstrained;
+WalkDelays = OptimalDelay;
+RunCors = MaxCorrelationsUnconstrained;
+RunDelays = OptimalDelay;
+[nWalk, xoutWalk] = hist(WalkCors, linspace(-0.2,1.2,35));
+nWalk = nWalk / sum(nWalk);
+% h = findobj(gca,'Type','patch');
+% set(h,'FaceColor','r','EdgeColor','w','facealpha',0.5)
+% hold on;
+[nRun, xoutRun] = hist(RunCors, linspace(-0.2, 1.2, 35)); 
+nRun = nRun / sum(nRun);
+n = [nWalk ; nRun]';
+bar(xoutWalk, n);
+set(gca, 'xlim', [-0.02 1])
+legend('Walking', 'Running')
+title('Distribution of Correlation Between Roll and Yaw', 'FontSize', 26)
+xlabel('Correlation Between Roll and Yaw', 'FontSize', 22)
+ylabel('Proportion of All Runs', 'FontSize', 22)
+set(gca, 'FontSize', 22)
+% h1 = findobj(gca,'Type','patch');
+% set(h1,'facealpha',0.5);
+
 %{
 MaxCorrelationsRIP = zeros(length(Begin2:End2), 1);
 for RunNumber = Begin2:End2
